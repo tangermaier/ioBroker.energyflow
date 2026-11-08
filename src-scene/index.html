@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>EnergyFlow scene</title>
+	</head>
+	<body>
+		<div id="map"></div>
+		<div id="night-overlay"></div>
+		<canvas id="weather-fx"></canvas>
+		<div id="status"></div>
+		<a id="back-button" href="#">&larr; Back</a>
+		<div id="overlay">
+			<div id="weather-label"></div>
+			<div id="shadow-label"></div>
+			<div id="scrub-row">
+				<input type="range" id="scrub" min="-48" max="47" step="0.25" value="0" />
+				<span id="scrub-label">Now</span>
+			</div>
+		</div>
+		<script src="/socket.io.js"></script>
+		<script type="module" src="./src/main.ts"></script>
+	</body>
+</html>

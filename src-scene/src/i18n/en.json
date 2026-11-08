@@ -1,0 +1,23 @@
+{
+	"title": "EnergyFlow scene",
+	"back": "← Back",
+	"no_location": "No location configured in system.config (Admin > System settings).",
+	"night": "Night",
+	"in_shadow": "In shadow",
+	"full_sun": "Full sun",
+	"now": "Now",
+	"today": "Today",
+	"tomorrow": "Tomorrow",
+	"day_after_tomorrow": "Day after tomorrow",
+	"yesterday": "Yesterday",
+	"day_before_yesterday": "Day before yesterday",
+	"in_days": "in {n} days",
+	"days_ago": "{n} days ago",
+	"weather_clear": "Clear",
+	"weather_partly-cloudy": "Partly cloudy",
+	"weather_cloudy": "Cloudy",
+	"weather_overcast": "Overcast",
+	"weather_rain": "Rain",
+	"weather_snow": "Snow",
+	"weather_storm": "Thunderstorm"
+}

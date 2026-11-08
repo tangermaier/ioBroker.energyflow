@@ -1,0 +1,75 @@
+{
+  "name": "iobroker.energyflow",
+  "version": "0.1.0",
+  "description": "Energy dashboard for ioBroker: define producers, consumers and storage, visualize energy flows, forecast PV yield and plan battery use with dynamic prices",
+  "author": {
+    "name": "tangermaier",
+    "email": "72624084+tangermaier@users.noreply.github.com"
+  },
+  "homepage": "https://github.com/tangermaier/ioBroker.energyflow",
+  "license": "GPL-3.0-only",
+  "keywords": [
+    "ioBroker",
+    "energy",
+    "energy dashboard",
+    "solar",
+    "photovoltaic",
+    "battery storage",
+    "forecast"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tangermaier/ioBroker.energyflow.git"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@iobroker/adapter-core": "^3.4.3",
+    "@tensorflow/tfjs": "^4.22.0"
+  },
+  "devDependencies": {
+    "@iobroker/adapter-dev": "^1.5.0",
+    "@iobroker/eslint-config": "^2.3.4",
+    "@iobroker/testing": "^5.3.0",
+    "@iobroker/types": "^7.2.2",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "^20.14.0",
+    "mocha": "^10.7.3",
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.6.3"
+  },
+  "main": "build/main.js",
+  "files": [
+    "admin/",
+    "build/",
+    "widgets/",
+    "www/",
+    "io-package.json",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "scripts": {
+    "build:ts": "tsc -p tsconfig.build.json",
+    "build:widgets": "cd src-widgets && npm run build && cd .. && node scripts/copy-widgets.js",
+    "build": "npm run build:ts",
+    "watch:ts": "tsc -p tsconfig.build.json --watch",
+    "watch": "npm run watch:ts",
+    "test:ts": "mocha --config test/mocharc.custom.json src/**/*.test.ts",
+    "test:package": "mocha test/package --exit",
+    "test": "npm run test:ts && npm run test:package",
+    "check": "tsc --noEmit",
+    "lint": "eslint -c eslint.config.mjs .",
+    "translate": "translate-adapter",
+    "build:scene": "cd src-scene && npm run build && cd .. && node tools/copy-scene.mjs",
+    "build:all": "npm run build:ts && npm run build:widgets && npm run build:scene && npm run notices",
+    "notices": "node tools/generate-notices.mjs",
+    "i18n:keys": "node tools/i18n-keys.mjs"
+  },
+  "bugs": {
+    "url": "https://github.com/tangermaier/ioBroker.energyflow/issues"
+  },
+  "readmeFilename": "README.md"
+}

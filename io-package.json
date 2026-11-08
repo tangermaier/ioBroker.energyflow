@@ -1,0 +1,200 @@
+{
+	"common": {
+		"name": "energyflow",
+		"version": "0.1.0",
+		"news": {
+			"0.1.0": {
+				"en": "Initial public release: energy flow widgets for vis-2 and a 2.5D scene, PV yield forecast with ML correction, advisory energy plan with dynamic prices, history via any history adapter",
+				"de": "Erste öffentliche Version: Energiefluss-Widgets für vis-2 und eine 2,5D-Szene, PV-Ertragsprognose mit ML-Korrektur, beratender Energieplan mit dynamischen Preisen, Verlaufsdaten über jeden History-Adapter",
+				"ru": "Первый публичный выпуск: виджеты потоков энергии для vis-2 и 2,5D-сцена, прогноз выработки PV с ML-коррекцией, рекомендательный энергетический план с динамическими ценами, история через любой адаптер истории",
+				"pt": "Primeira versão pública: widgets de fluxo de energia para vis-2 e uma cena 2,5D, previsão de produção FV com correção ML, plano energético consultivo com preços dinâmicos, histórico através de qualquer adaptador de histórico",
+				"nl": "Eerste openbare versie: energiestroom-widgets voor vis-2 en een 2,5D-scène, PV-opbrengstprognose met ML-correctie, adviserend energieplan met dynamische prijzen, historie via elke history-adapter",
+				"fr": "Première version publique : widgets de flux d'énergie pour vis-2 et une scène 2,5D, prévision de production PV avec correction ML, plan énergétique indicatif avec prix dynamiques, historique via n'importe quel adaptateur d'historique",
+				"it": "Prima versione pubblica: widget dei flussi di energia per vis-2 e una scena 2,5D, previsione di produzione FV con correzione ML, piano energetico consultivo con prezzi dinamici, storico tramite qualsiasi adattatore di storico",
+				"es": "Primera versión pública: widgets de flujo de energía para vis-2 y una escena 2,5D, previsión de producción FV con corrección ML, plan energético orientativo con precios dinámicos, historial a través de cualquier adaptador de historial",
+				"pl": "Pierwsze publiczne wydanie: widżety przepływu energii dla vis-2 i scena 2,5D, prognoza produkcji PV z korektą ML, doradczy plan energetyczny z cenami dynamicznymi, historia przez dowolny adapter historii",
+				"uk": "Перший публічний випуск: віджети потоків енергії для vis-2 та 2,5D-сцена, прогноз виробітку PV з ML-корекцією, рекомендаційний енергетичний план із динамічними цінами, історія через будь-який адаптер історії",
+				"zh-cn": "首个公开版本：用于 vis-2 的能量流小部件和 2.5D 场景、带 ML 校正的光伏发电预测、结合动态电价的建议性能源计划、通过任意历史适配器读取历史数据"
+			}
+		},
+		"titleLang": {
+			"en": "EnergyFlow",
+			"de": "EnergyFlow",
+			"ru": "EnergyFlow",
+			"pt": "EnergyFlow",
+			"nl": "EnergyFlow",
+			"fr": "EnergyFlow",
+			"it": "EnergyFlow",
+			"es": "EnergyFlow",
+			"pl": "EnergyFlow",
+			"uk": "EnergyFlow",
+			"zh-cn": "EnergyFlow"
+		},
+		"desc": {
+			"en": "Energy dashboard: define producers, consumers and storage, visualize energy flows, forecast PV yield and plan battery use with dynamic prices",
+			"de": "Energie-Dashboard: Erzeuger, Verbraucher und Speicher definieren, Energieflüsse visualisieren, PV-Ertrag prognostizieren und Akkunutzung mit dynamischen Preisen planen",
+			"ru": "Энергетическая панель: задайте производителей, потребителей и накопители, визуализируйте потоки энергии, прогнозируйте выработку PV и планируйте использование аккумулятора с динамическими ценами",
+			"pt": "Painel de energia: defina produtores, consumidores e armazenamento, visualize fluxos de energia, preveja a produção FV e planeie o uso da bateria com preços dinâmicos",
+			"nl": "Energiedashboard: producenten, verbruikers en opslag definiëren, energiestromen visualiseren, PV-opbrengst voorspellen en accugebruik plannen met dynamische prijzen",
+			"fr": "Tableau de bord énergétique : définir producteurs, consommateurs et stockage, visualiser les flux d'énergie, prévoir la production PV et planifier l'usage de la batterie avec des prix dynamiques",
+			"it": "Dashboard energetica: definisci produttori, utenze e accumuli, visualizza i flussi di energia, prevedi la produzione FV e pianifica l'uso della batteria con prezzi dinamici",
+			"es": "Panel de energía: define productores, consumidores y almacenamiento, visualiza los flujos de energía, prevé la producción FV y planifica el uso de la batería con precios dinámicos",
+			"pl": "Panel energii: zdefiniuj producentów, odbiorniki i magazyny, wizualizuj przepływy energii, prognozuj produkcję PV i planuj użycie akumulatora z cenami dynamicznymi",
+			"uk": "Енергетична панель: задайте виробників, споживачів і накопичувачі, візуалізуйте потоки енергії, прогнозуйте виробіток PV і плануйте використання акумулятора з динамічними цінами",
+			"zh-cn": "能源仪表板：定义发电设备、用电设备和储能，可视化能量流，预测光伏发电量，并结合动态电价规划电池使用"
+		},
+		"authors": ["tangermaier <72624084+tangermaier@users.noreply.github.com>"],
+		"keywords": ["energy", "energy dashboard", "solar", "photovoltaic", "battery storage", "forecast"],
+		"licenseInformation": {
+			"license": "GPL-3.0-only",
+			"type": "free"
+		},
+		"platform": "Javascript/Node.js",
+		"icon": "energyflow.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/tangermaier/ioBroker.energyflow/main/admin/energyflow.png",
+		"readme": "https://github.com/tangermaier/ioBroker.energyflow/blob/main/README.md",
+		"loglevel": "info",
+		"tier": 3,
+		"mode": "daemon",
+		"messagebox": true,
+		"type": "energy",
+		"compact": true,
+		"connectionType": "local",
+		"dataSource": "push",
+		"adminUI": {
+			"config": "json"
+		},
+		"dependencies": [
+			{
+				"js-controller": ">=5.0.0"
+			}
+		],
+		"globalDependencies": [
+			{
+				"admin": ">=6.0.0"
+			}
+		],
+		"visWidgets": {
+			"energyflowWidgets": {
+				"i18n": "component",
+				"name": "energyflowWidgets",
+				"url": "energyflow/customWidgets.js",
+				"bundlerType": "module",
+				"components": ["EnergyFlowWidget", "EnergyFlowDiagramWidget", "EnergyFlowArrowWidget", "EnergyPlanWidget"]
+			}
+		},
+		"restartAdapters": ["vis-2"]
+	},
+	"encryptedNative": [],
+	"protectedNative": [],
+	"native": {
+		"historyInstance": "",
+		"oidGridPurchasePrice": "",
+		"oidFeedInTariff": "",
+		"useTibber": false,
+		"tibberInstance": "",
+		"tibberHomeId": "",
+		"flexLoadDurationH": 2,
+		"flexLoadPowerKW": 2,
+		"maxGridExportW": 0,
+		"forecastHistoryDays": 2,
+		"colorForecast": "#ffb703",
+		"colorActual": "#2a9d8f",
+		"EntitiesList": [
+			{
+				"entityId": "example_pv",
+				"name": "Example producer",
+				"category": "producer",
+				"powerStateId": "",
+				"powerUnit": "W",
+				"invertSign": false,
+				"noiseThresholdW": 0,
+				"energyStateId": "",
+				"parentId": "",
+				"invertInParent": false,
+				"socStateId": "",
+				"capacityKWh": 0,
+				"peakPowerKWp": 0,
+				"tiltDeg": 30,
+				"azimuthDeg": 0,
+				"acLimitW": 0,
+				"color": "#8892a0"
+			}
+		]
+	},
+	"objects": [],
+	"instanceObjects": [
+		{
+			"_id": "info",
+			"type": "channel",
+			"common": {
+				"name": "Information"
+			},
+			"native": {}
+		},
+		{
+			"_id": "info.connection",
+			"type": "state",
+			"common": {
+				"role": "indicator.connected",
+				"name": "Adapter configuration processed and object tree up to date",
+				"type": "boolean",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "prices",
+			"type": "channel",
+			"common": {
+				"name": "Prices"
+			},
+			"native": {}
+		},
+		{
+			"_id": "prices.gridPurchasePrice",
+			"type": "state",
+			"common": {
+				"role": "value",
+				"name": "Grid purchase price of the current slot (gross)",
+				"type": "number",
+				"unit": "ct/kWh",
+				"read": true,
+				"write": false,
+				"def": 0
+			},
+			"native": {}
+		},
+		{
+			"_id": "prices.feedInTariff",
+			"type": "state",
+			"common": {
+				"role": "value",
+				"name": "Feed-in tariff of the current slot (0 during negative spot prices with Tibber)",
+				"type": "number",
+				"unit": "ct/kWh",
+				"read": true,
+				"write": false,
+				"def": 0
+			},
+			"native": {}
+		},
+		{
+			"_id": "prices.selfConsumptionValue",
+			"type": "state",
+			"common": {
+				"role": "value",
+				"name": "Value of self-consuming one kWh instead of exporting it (purchase price minus feed-in tariff)",
+				"type": "number",
+				"unit": "ct/kWh",
+				"read": true,
+				"write": false,
+				"def": 0
+			},
+			"native": {}
+		}
+	]
+}

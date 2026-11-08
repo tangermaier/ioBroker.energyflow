@@ -1,0 +1,23 @@
+{
+	"title": "Cena EnergyFlow",
+	"back": "← Voltar",
+	"no_location": "Nenhuma localização configurada em system.config (Admin > Definições do sistema).",
+	"night": "Noite",
+	"in_shadow": "À sombra",
+	"full_sun": "Sol pleno",
+	"now": "Agora",
+	"today": "Hoje",
+	"tomorrow": "Amanhã",
+	"day_after_tomorrow": "Depois de amanhã",
+	"yesterday": "Ontem",
+	"day_before_yesterday": "Anteontem",
+	"in_days": "daqui a {n} dias",
+	"days_ago": "há {n} dias",
+	"weather_clear": "Limpo",
+	"weather_partly-cloudy": "Parcialmente nublado",
+	"weather_cloudy": "Nublado",
+	"weather_overcast": "Encoberto",
+	"weather_rain": "Chuva",
+	"weather_snow": "Neve",
+	"weather_storm": "Trovoada"
+}

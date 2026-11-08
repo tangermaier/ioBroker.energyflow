@@ -1,0 +1,19 @@
+{
+	"name": "iobroker.energyflow-scene",
+	"private": true,
+	"version": "0.1.0",
+	"type": "module",
+	"dependencies": {
+		"maplibre-gl": "^4.7.1"
+	},
+	"devDependencies": {
+		"@iobroker/types": "^7.0.7",
+		"typescript": "^5.9.3",
+		"vite": "^7.3.2"
+	},
+	"scripts": {
+		"start": "vite --port 4174",
+		"build": "vite build",
+		"preview": "vite preview"
+	}
+}

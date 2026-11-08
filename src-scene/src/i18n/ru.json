@@ -1,0 +1,23 @@
+{
+	"title": "Сцена EnergyFlow",
+	"back": "← Назад",
+	"no_location": "Местоположение не задано в system.config (Admin > Системные настройки).",
+	"night": "Ночь",
+	"in_shadow": "В тени",
+	"full_sun": "Полное солнце",
+	"now": "Сейчас",
+	"today": "Сегодня",
+	"tomorrow": "Завтра",
+	"day_after_tomorrow": "Послезавтра",
+	"yesterday": "Вчера",
+	"day_before_yesterday": "Позавчера",
+	"in_days": "через {n} дн.",
+	"days_ago": "{n} дн. назад",
+	"weather_clear": "Ясно",
+	"weather_partly-cloudy": "Переменная облачность",
+	"weather_cloudy": "Облачно",
+	"weather_overcast": "Пасмурно",
+	"weather_rain": "Дождь",
+	"weather_snow": "Снег",
+	"weather_storm": "Гроза"
+}

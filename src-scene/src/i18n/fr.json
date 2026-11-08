@@ -1,0 +1,23 @@
+{
+	"title": "Scène EnergyFlow",
+	"back": "← Retour",
+	"no_location": "Aucune position configurée dans system.config (Admin > Paramètres système).",
+	"night": "Nuit",
+	"in_shadow": "À l'ombre",
+	"full_sun": "Plein soleil",
+	"now": "Maintenant",
+	"today": "Aujourd'hui",
+	"tomorrow": "Demain",
+	"day_after_tomorrow": "Après-demain",
+	"yesterday": "Hier",
+	"day_before_yesterday": "Avant-hier",
+	"in_days": "dans {n} jours",
+	"days_ago": "il y a {n} jours",
+	"weather_clear": "Dégagé",
+	"weather_partly-cloudy": "Partiellement nuageux",
+	"weather_cloudy": "Nuageux",
+	"weather_overcast": "Couvert",
+	"weather_rain": "Pluie",
+	"weather_snow": "Neige",
+	"weather_storm": "Orage"
+}

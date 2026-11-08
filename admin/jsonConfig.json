@@ -1,0 +1,630 @@
+{
+	"i18n": true,
+	"type": "panel",
+	"items": {
+		"_intro": {
+			"type": "staticText",
+			"text": "LBL_intro",
+			"newLine": true,
+			"xs": 12,
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"xl": 12
+		},
+		"_historySourceHeader": {
+			"type": "header",
+			"text": "LBL_historySourceHeader",
+			"newLine": true,
+			"xs": 12,
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"xl": 12,
+			"size": 3
+		},
+		"_historySourceIntro": {
+			"type": "staticText",
+			"text": "LBL_historySourceIntro",
+			"newLine": true,
+			"xs": 12,
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"xl": 12
+		},
+		"historyInstance": {
+			"type": "instance",
+			"adapter": "_dataSources",
+			"allowDeactivate": true,
+			"label": "LBL_historyInstance",
+			"tooltip": "TTIP_historyInstance",
+			"newLine": true,
+			"xs": 12,
+			"sm": 6,
+			"md": 4,
+			"lg": 3,
+			"xl": 3
+		},
+		"_historyHeader": {
+			"type": "header",
+			"text": "LBL_historyHeader",
+			"newLine": true,
+			"xs": 12,
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"xl": 12,
+			"size": 3
+		},
+		"_historyIntro": {
+			"type": "staticText",
+			"text": "LBL_historyIntro",
+			"newLine": true,
+			"xs": 12,
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"xl": 12
+		},
+		"forecastHistoryDays": {
+			"type": "number",
+			"label": "LBL_forecastHistoryDays",
+			"tooltip": "TTIP_forecastHistoryDays",
+			"newLine": true,
+			"min": 0,
+			"max": 14,
+			"step": 1,
+			"default": 2,
+			"xs": 12,
+			"sm": 6,
+			"md": 3,
+			"lg": 3,
+			"xl": 3
+		},
+		"colorForecast": {
+			"type": "color",
+			"label": "LBL_colorForecast",
+			"tooltip": "TTIP_colorForecast",
+			"newLine": true,
+			"default": "#ffb703",
+			"xs": 12,
+			"sm": 6,
+			"md": 3,
+			"lg": 3,
+			"xl": 3
+		},
+		"colorActual": {
+			"type": "color",
+			"label": "LBL_colorActual",
+			"tooltip": "TTIP_colorActual",
+			"default": "#2a9d8f",
+			"xs": 12,
+			"sm": 6,
+			"md": 3,
+			"lg": 3,
+			"xl": 3
+		},
+		"_pricesHeader": {
+			"type": "header",
+			"text": "LBL_pricesHeader",
+			"newLine": true,
+			"xs": 12,
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"xl": 12,
+			"size": 3
+		},
+		"_pricesIntro": {
+			"type": "staticText",
+			"text": "LBL_pricesIntro",
+			"newLine": true,
+			"xs": 12,
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"xl": 12
+		},
+		"useTibber": {
+			"type": "checkbox",
+			"label": "LBL_useTibber",
+			"tooltip": "TTIP_useTibber",
+			"newLine": true,
+			"xs": 12,
+			"sm": 12,
+			"md": 4,
+			"lg": 4,
+			"xl": 4
+		},
+		"tibberInstance": {
+			"type": "instance",
+			"adapter": "tibberlink",
+			"label": "LBL_tibberInstance",
+			"tooltip": "TTIP_tibberInstance",
+			"hidden": "!data.useTibber",
+			"xs": 12,
+			"sm": 6,
+			"md": 4,
+			"lg": 4,
+			"xl": 4
+		},
+		"tibberHomeId": {
+			"type": "selectSendTo",
+			"command": "getTibberHomes",
+			"jsonData": "{\"instance\": \"${data.tibberInstance}\"}",
+			"alsoDependsOn": ["tibberInstance"],
+			"label": "LBL_tibberHomeId",
+			"tooltip": "TTIP_tibberHomeId",
+			"hidden": "!data.useTibber",
+			"xs": 12,
+			"sm": 6,
+			"md": 4,
+			"lg": 4,
+			"xl": 4
+		},
+		"oidGridPurchasePrice": {
+			"type": "objectId",
+			"label": "LBL_oidGridPurchasePrice",
+			"tooltip": "TTIP_oidGridPurchasePrice",
+			"types": ["state"],
+			"hidden": "data.useTibber",
+			"newLine": true,
+			"xs": 12,
+			"sm": 6,
+			"md": 4,
+			"lg": 4,
+			"xl": 4
+		},
+		"oidFeedInTariff": {
+			"type": "objectId",
+			"label": "LBL_oidFeedInTariff",
+			"tooltip": "TTIP_oidFeedInTariff",
+			"types": ["state"],
+			"newLine": true,
+			"xs": 12,
+			"sm": 6,
+			"md": 4,
+			"lg": 4,
+			"xl": 4
+		},
+		"_flexLoadHeader": {
+			"type": "header",
+			"text": "LBL_flexLoadHeader",
+			"newLine": true,
+			"xs": 12,
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"xl": 12,
+			"size": 3
+		},
+		"_flexLoadIntro": {
+			"type": "staticText",
+			"text": "LBL_flexLoadIntro",
+			"newLine": true,
+			"xs": 12,
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"xl": 12
+		},
+		"flexLoadDurationH": {
+			"type": "number",
+			"label": "LBL_flexLoadDurationH",
+			"tooltip": "TTIP_flexLoadDurationH",
+			"min": 0.25,
+			"max": 12,
+			"step": 0.25,
+			"newLine": true,
+			"xs": 12,
+			"sm": 6,
+			"md": 3,
+			"lg": 3,
+			"xl": 3
+		},
+		"flexLoadPowerKW": {
+			"type": "number",
+			"label": "LBL_flexLoadPowerKW",
+			"tooltip": "TTIP_flexLoadPowerKW",
+			"min": 0.1,
+			"max": 22,
+			"step": 0.1,
+			"xs": 12,
+			"sm": 6,
+			"md": 3,
+			"lg": 3,
+			"xl": 3
+		},
+		"maxGridExportW": {
+			"type": "number",
+			"label": "LBL_maxGridExportW",
+			"tooltip": "TTIP_maxGridExportW",
+			"min": 0,
+			"step": 100,
+			"xs": 12,
+			"sm": 6,
+			"md": 3,
+			"lg": 3,
+			"xl": 3
+		},
+		"EntitiesList": {
+			"type": "table",
+			"label": "LBL_EntitiesList",
+			"newLine": true,
+			"xs": 12,
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"xl": 12,
+			"items": [
+				{
+					"type": "text",
+					"label": "LBL_item_entityId",
+					"tooltip": "TTIP_item_entityId",
+					"attr": "entityId",
+					"filter": false,
+					"sort": false,
+					"width": "10%"
+				},
+				{
+					"type": "text",
+					"label": "LBL_item_name",
+					"tooltip": "TTIP_item_name",
+					"attr": "name",
+					"filter": false,
+					"sort": false,
+					"width": "14%"
+				},
+				{
+					"type": "select",
+					"label": "LBL_item_category",
+					"tooltip": "TTIP_item_category",
+					"attr": "category",
+					"filter": false,
+					"sort": false,
+					"width": "10%",
+					"options": [
+						{
+							"value": "producer",
+							"label": "OPT_producer"
+						},
+						{
+							"value": "consumer",
+							"label": "OPT_consumer"
+						},
+						{
+							"value": "storage",
+							"label": "OPT_storage"
+						},
+						{
+							"value": "grid",
+							"label": "OPT_grid"
+						},
+						{
+							"value": "other",
+							"label": "OPT_other"
+						}
+					],
+					"default": "consumer"
+				},
+				{
+					"type": "objectId",
+					"label": "LBL_item_powerStateId",
+					"tooltip": "TTIP_item_powerStateId",
+					"attr": "powerStateId",
+					"types": ["state"],
+					"width": "16%"
+				},
+				{
+					"type": "objectId",
+					"label": "LBL_item_exportStateId",
+					"tooltip": "TTIP_item_exportStateId",
+					"attr": "exportStateId",
+					"types": ["state"],
+					"hidden": "data.category !== 'grid'",
+					"width": "12%"
+				},
+				{
+					"type": "select",
+					"label": "LBL_item_powerUnit",
+					"tooltip": "TTIP_item_powerUnit",
+					"attr": "powerUnit",
+					"filter": false,
+					"sort": false,
+					"width": "6%",
+					"options": [
+						{
+							"value": "W",
+							"label": "OPT_watt"
+						},
+						{
+							"value": "kW",
+							"label": "OPT_kilowatt"
+						}
+					],
+					"default": "W"
+				},
+				{
+					"type": "checkbox",
+					"label": "LBL_item_invertSign",
+					"tooltip": "TTIP_item_invertSign",
+					"attr": "invertSign",
+					"filter": false,
+					"sort": false,
+					"width": "6%",
+					"default": false
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_noiseThresholdW",
+					"tooltip": "TTIP_item_noiseThresholdW",
+					"attr": "noiseThresholdW",
+					"filter": false,
+					"sort": false,
+					"width": "8%",
+					"min": 0,
+					"step": 1,
+					"default": 0
+				},
+				{
+					"type": "objectId",
+					"label": "LBL_item_energyStateId",
+					"tooltip": "TTIP_item_energyStateId",
+					"attr": "energyStateId",
+					"types": ["state"],
+					"width": "14%"
+				},
+				{
+					"type": "text",
+					"label": "LBL_item_parentId",
+					"tooltip": "TTIP_item_parentId",
+					"attr": "parentId",
+					"filter": false,
+					"sort": false,
+					"width": "10%"
+				},
+				{
+					"type": "checkbox",
+					"label": "LBL_item_invertInParent",
+					"tooltip": "TTIP_item_invertInParent",
+					"attr": "invertInParent",
+					"hidden": "!data.parentId",
+					"filter": false,
+					"sort": false,
+					"width": "6%",
+					"default": false
+				},
+				{
+					"type": "objectId",
+					"label": "LBL_item_socStateId",
+					"tooltip": "TTIP_item_socStateId",
+					"attr": "socStateId",
+					"types": ["state"],
+					"hidden": "data.category !== 'storage'",
+					"width": "14%"
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_capacityKWh",
+					"tooltip": "TTIP_item_capacityKWh",
+					"attr": "capacityKWh",
+					"hidden": "data.category !== 'storage'",
+					"min": 0,
+					"step": 0.1,
+					"width": "8%",
+					"default": 0
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_chargeEfficiencyPercent",
+					"tooltip": "TTIP_item_chargeEfficiencyPercent",
+					"attr": "chargeEfficiencyPercent",
+					"hidden": "data.category !== 'storage'",
+					"min": 1,
+					"max": 100,
+					"step": 0.1,
+					"width": "8%",
+					"default": 100
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_dischargeEfficiencyPercent",
+					"tooltip": "TTIP_item_dischargeEfficiencyPercent",
+					"attr": "dischargeEfficiencyPercent",
+					"hidden": "data.category !== 'storage'",
+					"min": 1,
+					"max": 100,
+					"step": 0.1,
+					"width": "8%",
+					"default": 100
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_minSocPercent",
+					"tooltip": "TTIP_item_minSocPercent",
+					"attr": "minSocPercent",
+					"hidden": "data.category !== 'storage'",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"width": "8%",
+					"default": 20
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_maxSocPercent",
+					"tooltip": "TTIP_item_maxSocPercent",
+					"attr": "maxSocPercent",
+					"hidden": "data.category !== 'storage'",
+					"min": 1,
+					"max": 100,
+					"step": 1,
+					"width": "8%",
+					"default": 100
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_maxPowerKW",
+					"tooltip": "TTIP_item_maxPowerKW",
+					"attr": "maxPowerKW",
+					"hidden": "data.category !== 'storage'",
+					"min": 0,
+					"step": 0.1,
+					"width": "8%",
+					"default": 0
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_wearCostCtPerKWh",
+					"tooltip": "TTIP_item_wearCostCtPerKWh",
+					"attr": "wearCostCtPerKWh",
+					"hidden": "data.category !== 'storage'",
+					"min": 0,
+					"step": 0.1,
+					"width": "8%",
+					"default": 0
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_peakPowerKWp",
+					"tooltip": "TTIP_item_peakPowerKWp",
+					"attr": "peakPowerKWp",
+					"hidden": "data.category !== 'producer'",
+					"min": 0,
+					"step": 0.1,
+					"width": "8%",
+					"default": 0
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_tiltDeg",
+					"tooltip": "TTIP_item_tiltDeg",
+					"attr": "tiltDeg",
+					"hidden": "data.category !== 'producer'",
+					"min": 0,
+					"max": 90,
+					"step": 1,
+					"width": "6%",
+					"default": 30
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_azimuthDeg",
+					"tooltip": "TTIP_item_azimuthDeg",
+					"attr": "azimuthDeg",
+					"hidden": "data.category !== 'producer'",
+					"min": -180,
+					"max": 180,
+					"step": 1,
+					"width": "6%",
+					"default": 0
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_acLimitW",
+					"tooltip": "TTIP_item_acLimitW",
+					"attr": "acLimitW",
+					"hidden": "data.category !== 'producer'",
+					"min": 0,
+					"step": 10,
+					"width": "8%",
+					"default": 0
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_efficiencyPercent",
+					"tooltip": "TTIP_item_efficiencyPercent",
+					"attr": "efficiencyPercent",
+					"hidden": "data.category !== 'producer'",
+					"min": 1,
+					"max": 100,
+					"step": 0.1,
+					"width": "8%",
+					"default": 100
+				},
+				{
+					"type": "color",
+					"label": "LBL_item_color",
+					"tooltip": "TTIP_item_color",
+					"attr": "color",
+					"filter": false,
+					"sort": false,
+					"width": "6%",
+					"default": "#8892a0"
+				},
+				{
+					"type": "select",
+					"label": "LBL_item_powerSource",
+					"tooltip": "TTIP_item_powerSource",
+					"attr": "powerSource",
+					"hidden": "data.category !== 'grid' && data.category !== 'storage'",
+					"filter": false,
+					"sort": false,
+					"width": "8%",
+					"options": [
+						{
+							"value": "measured",
+							"label": "OPT_powerSource_measured"
+						},
+						{
+							"value": "balance",
+							"label": "OPT_powerSource_balance"
+						},
+						{
+							"value": "measuredWithFallback",
+							"label": "OPT_powerSource_fallback"
+						}
+					],
+					"default": "measured"
+				},
+				{
+					"type": "number",
+					"label": "LBL_item_staleAfterS",
+					"tooltip": "TTIP_item_staleAfterS",
+					"attr": "staleAfterS",
+					"hidden": "data.powerSource !== 'measuredWithFallback'",
+					"min": 10,
+					"step": 10,
+					"width": "5%",
+					"default": 120
+				},
+				{
+					"type": "objectId",
+					"label": "LBL_item_fallbackStateId",
+					"tooltip": "TTIP_item_fallbackStateId",
+					"attr": "fallbackStateId",
+					"types": ["state"],
+					"hidden": "data.powerSource !== 'measuredWithFallback'",
+					"width": "12%"
+				},
+				{
+					"type": "checkbox",
+					"label": "LBL_item_fallbackInvertSign",
+					"tooltip": "TTIP_item_fallbackInvertSign",
+					"attr": "fallbackInvertSign",
+					"hidden": "data.powerSource !== 'measuredWithFallback' || !data.fallbackStateId",
+					"width": "4%",
+					"default": false
+				},
+				{
+					"type": "objectId",
+					"label": "LBL_item_inverterAcStateId",
+					"tooltip": "TTIP_item_inverterAcStateId",
+					"attr": "inverterAcStateId",
+					"types": ["state"],
+					"hidden": "data.category !== 'storage'",
+					"width": "12%"
+				},
+				{
+					"type": "text",
+					"label": "LBL_item_inverterPvIds",
+					"tooltip": "TTIP_item_inverterPvIds",
+					"attr": "inverterPvIds",
+					"hidden": "data.category !== 'storage' || !data.inverterAcStateId",
+					"width": "10%"
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"title": "EnergyFlow 场景",
+	"back": "← 返回",
+	"no_location": "system.config 中未配置位置（Admin > 系统设置）。",
+	"night": "夜间",
+	"in_shadow": "处于阴影中",
+	"full_sun": "阳光充足",
+	"now": "现在",
+	"today": "今天",
+	"tomorrow": "明天",
+	"day_after_tomorrow": "后天",
+	"yesterday": "昨天",
+	"day_before_yesterday": "前天",
+	"in_days": "{n} 天后",
+	"days_ago": "{n} 天前",
+	"weather_clear": "晴",
+	"weather_partly-cloudy": "少云",
+	"weather_cloudy": "多云",
+	"weather_overcast": "阴",
+	"weather_rain": "雨",
+	"weather_snow": "雪",
+	"weather_storm": "雷暴"
+}

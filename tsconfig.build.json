@@ -1,0 +1,12 @@
+// This file is the entry point to compile the source code to JS.
+// It is used when publishing the adapter or running tests
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"noEmit": false,
+		"removeComments": false,
+		"allowImportingTsExtensions": false
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["build/**", "node_modules/**", "test/**", "**/*.test.ts"]
+}

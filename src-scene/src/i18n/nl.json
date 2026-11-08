@@ -1,0 +1,23 @@
+{
+	"title": "EnergyFlow-scène",
+	"back": "← Terug",
+	"no_location": "Geen locatie geconfigureerd in system.config (Admin > Systeeminstellingen).",
+	"night": "Nacht",
+	"in_shadow": "In de schaduw",
+	"full_sun": "Volle zon",
+	"now": "Nu",
+	"today": "Vandaag",
+	"tomorrow": "Morgen",
+	"day_after_tomorrow": "Overmorgen",
+	"yesterday": "Gisteren",
+	"day_before_yesterday": "Eergisteren",
+	"in_days": "over {n} dagen",
+	"days_ago": "{n} dagen geleden",
+	"weather_clear": "Helder",
+	"weather_partly-cloudy": "Licht bewolkt",
+	"weather_cloudy": "Bewolkt",
+	"weather_overcast": "Betrokken",
+	"weather_rain": "Regen",
+	"weather_snow": "Sneeuw",
+	"weather_storm": "Onweer"
+}
