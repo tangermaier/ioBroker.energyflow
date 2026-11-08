@@ -360,6 +360,15 @@ const PEEL_OFF_HEAD_EXTRA = 8;
 const PEEL_OFF_HEAD_LEN = 12;
 /** Gap between the arrowhead's tip and the target icon's circle outline. */
 const PEEL_OFF_TIP_GAP = 2;
+/** Vertical offset of the loss/residual icons above the trunk's top edge. */
+const PEEL_OFF_RISE = 70;
+/** Radius of a peel-off icon (pushPeelOff's default). */
+const PEEL_OFF_RADIUS = 22;
+/**
+ * Room needed above a peel-off icon's center for its label (renderIcon draws the label baseline
+ * at y - r - 20; plus ~14 for the cap height of the 12.5 px font and a little air).
+ */
+const PEEL_OFF_LABEL_ROOM = PEEL_OFF_RADIUS + 20 + 16;
 
 /**
  * Geometry of a peel-off branch: a straight band whose foot sits flat (horizontal edge) on the
@@ -448,7 +457,7 @@ function pushPeelOff(
 	keyPrefix: string,
 	formatValue: (v: number) => string,
 	iconColor: string,
-	radius = 22,
+	radius = PEEL_OFF_RADIUS,
 ): void {
 	const { band, head } = peelOffGeometry(fromX, fromY, iconX, iconY, thickness, radius);
 	flow.push(
@@ -1540,7 +1549,14 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 			);
 		}
 
+		// Top of the drawing: the loss/residual icons sit ABOVE the trunk, which itself starts close to
+		// y=0 - without extending the viewBox their labels end up at negative y and are clipped
+		// wherever the SVG doesn't overflow visibly (e.g. the full-screen dialog).
+		let contentTop = 0;
+		const peelOffTop = barTopY - PEEL_OFF_RISE - PEEL_OFF_LABEL_ROOM;
+
 		if (producerLossTotal > deadband) {
+			contentTop = Math.min(contentTop, peelOffTop);
 			const lossThickness = Math.max(1.5, producerLossTotal * dyn);
 			const fromX = Math.min(MERGE_X + 20, TAP_X - 10);
 			pushPeelOff(
@@ -1550,7 +1566,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 				fromX,
 				barTopY,
 				fromX + 40,
-				barTopY - 70,
+				barTopY - PEEL_OFF_RISE,
 				lossThickness,
 				LOSS_COLOR,
 				producerLossLabel,
@@ -1620,6 +1636,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 		const residualThickness = residualValue * dyn;
 		const diagnosticDeadband = this.viewMode === "live" ? DIAGNOSTIC_DEADBAND : DIAGNOSTIC_ENERGY_DEADBAND;
 		if (residualValue > diagnosticDeadband) {
+			contentTop = Math.min(contentTop, peelOffTop);
 			const direction =
 				backendResidual === undefined ? "" : backendResidual > 0 ? tr("energyflow_rt_residual_more_supply") : tr("energyflow_rt_residual_more_use");
 			pushPeelOff(
@@ -1629,7 +1646,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 				TAP_X,
 				barTopY,
 				TAP_X,
-				barTopY - 70,
+				barTopY - PEEL_OFF_RISE,
 				Math.max(1.5, residualThickness),
 				REST_COLOR_FALLBACK,
 				tr("energyflow_rt_residual"),
@@ -1675,7 +1692,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 
 		return (
 			<svg
-				viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+				viewBox={`0 ${contentTop} ${VIEW_W} ${VIEW_H - contentTop}`}
 				style={{ width: "100%", height: "100%", display: "block" }}
 			>
 				<defs>
