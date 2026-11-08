@@ -26,15 +26,19 @@ jobs:
                   node-version: 20.x
                   cache: npm
             - run: npm ci
+            # The widget and scene sub-projects must be installed BEFORE linting: the root eslint
+            # config type-checks their sources, and without their node_modules React/maplibre
+            # types resolve to "any" and trigger type-aware lint errors.
+            - name: Install widget and scene dependencies
+              run: |
+                  npm ci --prefix src-widgets
+                  npm ci --prefix src-scene
             - name: Type check (adapter)
               run: npm run check
             - name: Lint
               run: npm run lint
-            - name: Build widgets and scene
-              run: |
-                  npm ci --prefix src-widgets
-                  npm ci --prefix src-scene
-                  npm run build:all
+            - name: Build adapter, widgets and scene
+              run: npm run build:all
             - name: License check
               run: node tools/generate-notices.mjs --check
 
