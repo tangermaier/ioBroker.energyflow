@@ -8,7 +8,7 @@ import { HistoryManager } from "./lib/history/historyManager.js";
 import { PriceManager } from "./lib/prices/priceManager.js";
 import { RecommendationManager } from "./lib/recommendation/recommendationManager.js";
 
-class EnergyFlow extends utils.Adapter {
+class SolarCockpit extends utils.Adapter {
 	private entityManager!: EntityManager;
 	private forecastManager!: ForecastManager;
 	private historyManager!: HistoryManager;
@@ -17,14 +17,14 @@ class EnergyFlow extends utils.Adapter {
 	private buildingManager!: BuildingManager;
 
 	/**
-	 * Creates a new EnergyFlow adapter instance and registers all ioBroker lifecycle event handlers.
+	 * Creates a new SolarCockpit adapter instance and registers all ioBroker lifecycle event handlers.
 	 *
 	 * @param options - Optional adapter configuration options passed through to the base class.
 	 */
 	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		super({
 			...options,
-			name: "energyflow",
+			name: "solarcockpit",
 		});
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
@@ -207,8 +207,8 @@ class EnergyFlow extends utils.Adapter {
 
 if (require.main !== module) {
 	// Export the constructor in compact mode
-	module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new EnergyFlow(options);
+	module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new SolarCockpit(options);
 } else {
 	// otherwise start the instance directly
-	(() => new EnergyFlow())();
+	(() => new SolarCockpit())();
 }

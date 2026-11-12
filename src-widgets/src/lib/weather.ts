@@ -6,7 +6,7 @@
  * `weatherLayers` condition/intensity model - Helios' particle-canvas rain/snow animation and
  * scene color grading are full-screen dashboard effects, out of scope for a compact card
  * widget. The condition label is translated to German, consistent with this widget's other
- * hardcoded German strings (see NODE_LABELS in EnergyFlowWidget.tsx).
+ * hardcoded German strings (see NODE_LABELS in SolarCockpitForecastWidget.tsx).
  */
 
 import { tr } from "./i18n";
@@ -73,5 +73,5 @@ export function weatherLayers(w: WeatherInput): WeatherLayers {
 							? "partly-cloudy"
 							: "clear";
 
-	return { sun, condition, label: tr(`energyflow_rt_weather_${condition}`) };
+	return { sun, condition, label: tr(`solarcockpit_rt_weather_${condition}`) };
 }

@@ -9,7 +9,7 @@ import { EnergyPlanChart, type PlanLayers } from "./lib/EnergyPlanChart";
 import { EnergyPlanDialog } from "./lib/EnergyPlanDialog";
 import { de, hhmm, levelLabel, MODE_STYLE, modeLabel, parsePlan, relativeTime } from "./lib/plan";
 
-interface EnergyPlanRxData {
+interface SolarCockpitPlanRxData {
 	oidPlan: string;
 	oidStatus: string;
 	oidFlexStart: string;
@@ -30,7 +30,7 @@ interface EnergyPlanRxData {
  * header (current mode + price). Clicking opens the fullscreen dialog with layer toggles and the
  * recommendation text. Layers and a compact mode for small tiles are configurable.
  */
-export default class EnergyPlanWidget extends (window.visRxWidget as typeof VisRxWidget)<EnergyPlanRxData, VisRxWidgetState> {
+export default class SolarCockpitPlanWidget extends (window.visRxWidget as typeof VisRxWidget)<SolarCockpitPlanRxData, VisRxWidgetState> {
 	static adapter: string;
 
 	private fullscreen = false;
@@ -50,51 +50,51 @@ export default class EnergyPlanWidget extends (window.visRxWidget as typeof VisR
 	/** Static widget description for the vis-2 palette and attribute editor. */
 	static getWidgetInfo(): RxWidgetInfo {
 		return {
-			id: "tplEnergyFlowPlan",
-			visSet: "energyflow",
+			id: "tplSolarCockpitPlan",
+			visSet: "solarcockpit",
 			visSetLabel: "set_label",
 			visSetColor: "#ff9800",
-			visName: "EnergyPlanWidget",
+			visName: "SolarCockpitPlanWidget",
 			visWidgetLabel: "widget_label_plan",
 			visAttrs: [
 				{
 					name: "plan",
-					label: "energyflow_group_plan",
+					label: "solarcockpit_group_plan",
 					fields: [
-						{ name: "oidPlan", type: "id", label: "energyflow_oid_plan", default: "energyflow.0.plan.json" },
-						{ name: "oidStatus", type: "id", label: "energyflow_oid_plan_status", default: "energyflow.0.plan.status" },
-						{ name: "oidFlexStart", type: "id", label: "energyflow_oid_flex_start", default: "energyflow.0.recommendation.flexWindowStart" },
-						{ name: "oidFlexEnd", type: "id", label: "energyflow_oid_flex_end", default: "energyflow.0.recommendation.flexWindowEnd" },
-						{ name: "oidText", type: "id", label: "energyflow_oid_recommendation", default: "energyflow.0.recommendation.text" },
+						{ name: "oidPlan", type: "id", label: "solarcockpit_oid_plan", default: "solarcockpit.0.plan.json" },
+						{ name: "oidStatus", type: "id", label: "solarcockpit_oid_plan_status", default: "solarcockpit.0.plan.status" },
+						{ name: "oidFlexStart", type: "id", label: "solarcockpit_oid_flex_start", default: "solarcockpit.0.recommendation.flexWindowStart" },
+						{ name: "oidFlexEnd", type: "id", label: "solarcockpit_oid_flex_end", default: "solarcockpit.0.recommendation.flexWindowEnd" },
+						{ name: "oidText", type: "id", label: "solarcockpit_oid_recommendation", default: "solarcockpit.0.recommendation.text" },
 					],
 				},
 				{
 					name: "layers",
-					label: "energyflow_group_plan_layers",
+					label: "solarcockpit_group_plan_layers",
 					fields: [
-						{ name: "showPrice", type: "checkbox", label: "energyflow_plan_show_price", default: true },
-						{ name: "showPvLoad", type: "checkbox", label: "energyflow_plan_show_pvload", default: true },
-						{ name: "showSoc", type: "checkbox", label: "energyflow_plan_show_soc", default: true },
-						{ name: "showModes", type: "checkbox", label: "energyflow_plan_show_modes", default: true },
-						{ name: "showMarginal", type: "checkbox", label: "energyflow_plan_show_marginal", default: false },
-						{ name: "showFlex", type: "checkbox", label: "energyflow_plan_show_flex", default: true },
-						{ name: "compact", type: "checkbox", label: "energyflow_plan_compact", default: false },
+						{ name: "showPrice", type: "checkbox", label: "solarcockpit_plan_show_price", default: true },
+						{ name: "showPvLoad", type: "checkbox", label: "solarcockpit_plan_show_pvload", default: true },
+						{ name: "showSoc", type: "checkbox", label: "solarcockpit_plan_show_soc", default: true },
+						{ name: "showModes", type: "checkbox", label: "solarcockpit_plan_show_modes", default: true },
+						{ name: "showMarginal", type: "checkbox", label: "solarcockpit_plan_show_marginal", default: false },
+						{ name: "showFlex", type: "checkbox", label: "solarcockpit_plan_show_flex", default: true },
+						{ name: "compact", type: "checkbox", label: "solarcockpit_plan_compact", default: false },
 					],
 				},
 			],
 			visDefaultStyle: { width: 520, height: 300 },
-			visPrev: "widgets/energyflow/img/vis-energyflow.png",
+			visPrev: "widgets/solarcockpit/img/vis-solarcockpit-forecast.png",
 		};
 	}
 
 	/** Instance accessor required by vis-2 - delegates to the static widget info. */
 	getWidgetInfo(): RxWidgetInfo {
-		return EnergyPlanWidget.getWidgetInfo();
+		return SolarCockpitPlanWidget.getWidgetInfo();
 	}
 
 	/** Translation key prefix (adapter name + "_"), prepended by vis-2 to every label key. */
 	static getI18nPrefix(): string {
-		return `${EnergyPlanWidget.adapter}_`;
+		return `${SolarCockpitPlanWidget.adapter}_`;
 	}
 
 	/**
@@ -140,7 +140,7 @@ export default class EnergyPlanWidget extends (window.visRxWidget as typeof VisR
 					}}
 					elevation={2}
 					onClick={this.openFullscreen}
-					title={tr("energyflow_rt_open_fullscreen")}
+					title={tr("solarcockpit_rt_open_fullscreen")}
 				>
 					{current && (
 						<div
@@ -151,16 +151,16 @@ export default class EnergyPlanWidget extends (window.visRxWidget as typeof VisR
 								gap: "0 8px",
 								fontSize: compact ? 10 : 12,
 								padding: "0 4px 4px",
-								color: "var(--energyflow-label, #37474f)",
+								color: "var(--solarcockpit-label, #37474f)",
 							}}
 						>
 							<span>
 								<span style={{ color: MODE_STYLE[current.mode].color }}>■</span> {modeLabel(current.mode)}
-								{!compact && ` · ${tr("energyflow_rt_soc_value", { soc: de(current.soc, 0) })}`}
+								{!compact && ` · ${tr("solarcockpit_rt_soc_value", { soc: de(current.soc, 0) })}`}
 							</span>
 							{layers.flex && flexStart && flexEnd ? (
 								<span style={{ color: "#4cc9f0", whiteSpace: "nowrap" }}>
-									{tr("energyflow_rt_appliance_window_colon", { start: relativeTime(flexStart), end: hhmm(flexEnd) })}
+									{tr("solarcockpit_rt_appliance_window_colon", { start: relativeTime(flexStart), end: hhmm(flexEnd) })}
 								</span>
 							) : null}
 							<span style={{ whiteSpace: "nowrap" }}>

@@ -6,13 +6,13 @@ import type VisRxWidget from "@iobroker/types-vis-2/visRxWidget";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 
-import energyflowIcon from "./assets/energyflow-icon.png";
+import solarcockpitIcon from "./assets/solarcockpit-icon.png";
 import { formatPower } from "./lib/format";
 
 /** The vis-2 view holding the standalone 2.5D scene (src-scene, embedded via vis-2's iFrame widget) - opened by clicking the diagram. */
-const SCENE_VIEW = "Energyflow3D";
+const SCENE_VIEW = "SolarCockpit3D";
 
-interface EnergyFlowDiagramRxData {
+interface SolarCockpitYieldRxData {
 	oidProducer: string;
 	oidConsumer: string;
 	oidStorage: string;
@@ -67,7 +67,7 @@ function trimToRims(from: NodePos, to: NodePos, fromRadius: number, toRadius: nu
  * @param key - node key
  */
 function nodeLabel(key: keyof typeof NODES): string {
-	return tr(`energyflow_rt_node_${key}`);
+	return tr(`solarcockpit_rt_node_${key}`);
 }
 
 /**
@@ -121,7 +121,7 @@ function FlowEdge(props: { from: NodePos; to: NodePos; active: boolean; reversed
 				y1={rimFrom.y}
 				x2={rimTo.x}
 				y2={rimTo.y}
-				stroke="var(--energyflow-edge, #8892a0)"
+				stroke="var(--solarcockpit-edge, #8892a0)"
 				strokeWidth={active ? 3 : 1.5}
 				opacity={active ? 0.9 : 0.35}
 			/>
@@ -153,61 +153,61 @@ function FlowEdge(props: { from: NodePos; to: NodePos; active: boolean; reversed
 
 /**
  * Standalone energy-flow card: the four-node SVG diagram only (producer/grid/storage/consumer
- * around a house hub). Split out from EnergyFlowWidget (which now covers forecast/weather/
+ * around a house hub). Split out from SolarCockpitForecastWidget (which now covers forecast/weather/
  * recommendation) so it can be placed on a dashboard independently, matching the "one focused
  * widget per concern" shape of vis-2-widgets-energy's own flow-diagram widget. The whole card is
  * clickable - it doubles as the entry point into the full 2.5D scene (src-scene), which is not a
  * vis-2 widget itself and would otherwise have no obvious way to be reached from a dashboard.
  */
-export default class EnergyFlowDiagramWidget extends (window.visRxWidget as typeof VisRxWidget)<EnergyFlowDiagramRxData, VisRxWidgetState> {
+export default class SolarCockpitYieldWidget extends (window.visRxWidget as typeof VisRxWidget)<SolarCockpitYieldRxData, VisRxWidgetState> {
 	static adapter: string;
 
 	static getWidgetInfo(): RxWidgetInfo {
 		return {
-			id: "tplEnergyFlowDiagram",
-			visSet: "energyflow",
+			id: "tplSolarCockpitYield",
+			visSet: "solarcockpit",
 			visSetLabel: "set_label",
 			visSetColor: "#ff9800",
-			visName: "EnergyFlowDiagramWidget",
-			visWidgetLabel: "widget_label_diagram",
+			visName: "SolarCockpitYieldWidget",
+			visWidgetLabel: "widget_label_yield",
 			visAttrs: [
 				{
 					name: "oids",
-					label: "energyflow_group_oids",
+					label: "solarcockpit_group_oids",
 					fields: [
-						{ name: "oidProducer", type: "id", label: "energyflow_oid_producer", default: "energyflow.0.summary.producer.power" },
-						{ name: "oidConsumer", type: "id", label: "energyflow_oid_consumer", default: "energyflow.0.summary.consumer.power" },
-						{ name: "oidStorage", type: "id", label: "energyflow_oid_storage", default: "energyflow.0.summary.storage.power" },
-						{ name: "oidGrid", type: "id", label: "energyflow_oid_grid", default: "energyflow.0.summary.grid.power" },
-						{ name: "oidGridSource", type: "id", label: "energyflow_oid_grid_source", default: "energyflow.0.summary.grid.source" },
+						{ name: "oidProducer", type: "id", label: "solarcockpit_oid_producer", default: "solarcockpit.0.summary.producer.power" },
+						{ name: "oidConsumer", type: "id", label: "solarcockpit_oid_consumer", default: "solarcockpit.0.summary.consumer.power" },
+						{ name: "oidStorage", type: "id", label: "solarcockpit_oid_storage", default: "solarcockpit.0.summary.storage.power" },
+						{ name: "oidGrid", type: "id", label: "solarcockpit_oid_grid", default: "solarcockpit.0.summary.grid.power" },
+						{ name: "oidGridSource", type: "id", label: "solarcockpit_oid_grid_source", default: "solarcockpit.0.summary.grid.source" },
 					],
 				},
 			],
-			visPrev: "widgets/energyflow/img/vis-energyflow-diagram.png",
+			visPrev: "widgets/solarcockpit/img/vis-solarcockpit-yield.png",
 		};
 	}
 
 	/** vis-2 widget metadata (editor attributes and preview) */
 	getWidgetInfo(): RxWidgetInfo {
-		return EnergyFlowDiagramWidget.getWidgetInfo();
+		return SolarCockpitYieldWidget.getWidgetInfo();
 	}
 
 	static getI18nPrefix(): string {
-		return `${EnergyFlowDiagramWidget.adapter}_`;
+		return `${SolarCockpitYieldWidget.adapter}_`;
 	}
 
 	renderWidgetBody(props: RxRenderWidgetProps): React.JSX.Element {
 		super.renderWidgetBody(props);
 		syncLanguage(this.props.context);
 
-		const hubClipId = `energyflow-hub-clip-${props.id}`;
+		const hubClipId = `solarcockpit-hub-clip-${props.id}`;
 		const { oidProducer, oidConsumer, oidStorage, oidGrid, oidGridSource } = this.state.rxData;
 		const gridEstimated = !!oidGridSource && this.state.values[`${oidGridSource}.val`] === "balance";
 
 		if (!oidProducer && !oidConsumer && !oidStorage && !oidGrid) {
 			return (
 				<Card sx={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", p: 2, boxSizing: "border-box" }}>
-					<span style={{ opacity: 0.6, textAlign: "center" }}>{tr("energyflow_rt_configure_diagram")}</span>
+					<span style={{ opacity: 0.6, textAlign: "center" }}>{tr("solarcockpit_rt_configure_diagram")}</span>
 				</Card>
 			);
 		}
@@ -234,7 +234,7 @@ export default class EnergyFlowDiagramWidget extends (window.visRxWidget as type
 						window.location.hash = SCENE_VIEW;
 					}}
 					disabled={this.props.editMode}
-					title={tr("energyflow_rt_open_3d")}
+					title={tr("solarcockpit_rt_open_3d")}
 					sx={{
 						width: "100%",
 						height: "100%",
@@ -298,10 +298,10 @@ export default class EnergyFlowDiagramWidget extends (window.visRxWidget as type
 							cx={HUB.x}
 							cy={HUB.y}
 							r={34}
-							fill="var(--energyflow-hub, #263238)"
+							fill="var(--solarcockpit-hub, #263238)"
 						/>
 						<image
-							href={energyflowIcon}
+							href={solarcockpitIcon}
 							x={HUB.x - 32}
 							y={HUB.y - 32}
 							width={64}
@@ -333,7 +333,7 @@ export default class EnergyFlowDiagramWidget extends (window.visRxWidget as type
 									y={NODES[key].y - 4}
 									textAnchor="middle"
 									fontSize={10}
-									fill="var(--energyflow-label, #37474f)"
+									fill="var(--solarcockpit-label, #37474f)"
 								>
 									{key === "grid" && gridEstimated ? `≈ ${nodeLabel(key)}` : nodeLabel(key)}
 								</text>
@@ -343,9 +343,9 @@ export default class EnergyFlowDiagramWidget extends (window.visRxWidget as type
 										y={NODES[key].y + 38}
 										textAnchor="middle"
 										fontSize={8}
-										fill="var(--energyflow-label, #37474f)"
+										fill="var(--solarcockpit-label, #37474f)"
 									>
-										<title>{tr("energyflow_rt_grid_estimated_hint")}</title>
+										<title>{tr("solarcockpit_rt_grid_estimated_hint")}</title>
 										geschätzt
 									</text>
 								)}
@@ -355,7 +355,7 @@ export default class EnergyFlowDiagramWidget extends (window.visRxWidget as type
 									textAnchor="middle"
 									fontSize={11}
 									fontWeight={600}
-									fill="var(--energyflow-value, #102027)"
+									fill="var(--solarcockpit-value, #102027)"
 								>
 									{formatPower(watts)}
 								</text>

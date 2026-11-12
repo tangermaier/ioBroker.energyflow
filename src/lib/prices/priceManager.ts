@@ -13,11 +13,11 @@ import {
 
 /**
  * Own default datapoints under 0_userdata.0, created if the corresponding admin config field is
- * left empty. The idea: EnergyFlow reads its own two "starter" datapoints out of the box, and
+ * left empty. The idea: SolarCockpit reads its own two "starter" datapoints out of the box, and
  * users without a dynamic tariff simply keep a hand-maintained value there.
  */
-const DEFAULT_GRID_PURCHASE_PRICE_OID = "0_userdata.0.energyflow_gridPurchasePriceCtPerKWh";
-const DEFAULT_FEED_IN_TARIFF_OID = "0_userdata.0.energyflow_feedInTariffCtPerKWh";
+const DEFAULT_GRID_PURCHASE_PRICE_OID = "0_userdata.0.solarcockpit_gridPurchasePriceCtPerKWh";
+const DEFAULT_FEED_IN_TARIFF_OID = "0_userdata.0.solarcockpit_feedInTariffCtPerKWh";
 
 /** Quality code "substitute value from device or instance" - marks a held-over last known price. */
 const Q_SUBSTITUTE = 0x40;
@@ -78,7 +78,7 @@ export class PriceManager {
 		await this.ensureOwnDefaultDatapoint(
 			this.feedInTariffOid,
 			DEFAULT_FEED_IN_TARIFF_OID,
-			"EnergyFlow feed-in tariff (ct/kWh) - edit by hand or repoint the adapter's oidFeedInTariff setting",
+			"SolarCockpit feed-in tariff (ct/kWh) - edit by hand or repoint the adapter's oidFeedInTariff setting",
 		);
 
 		if (this.useTibber) {
@@ -96,7 +96,7 @@ export class PriceManager {
 			await this.ensureOwnDefaultDatapoint(
 				this.gridPurchasePriceOid,
 				DEFAULT_GRID_PURCHASE_PRICE_OID,
-				"EnergyFlow grid purchase price (ct/kWh) - edit by hand, or enable Tibber prices in the adapter settings",
+				"SolarCockpit grid purchase price (ct/kWh) - edit by hand, or enable Tibber prices in the adapter settings",
 			);
 		}
 
@@ -242,7 +242,7 @@ export class PriceManager {
 
 	/**
 	 * Mirrors Tibber's own running cost of today's grid import into `costs.tibberToday` - the
-	 * billed value, as a cross-check for EnergyFlow's own `costs.today` (which integrates the grid
+	 * billed value, as a cross-check for SolarCockpit's own `costs.today` (which integrates the grid
 	 * entity x slot price and also subtracts feed-in revenue, so the two only match on days without
 	 * export). Tibber resets it at local midnight.
 	 */
@@ -346,11 +346,11 @@ export class PriceManager {
 
 	/**
 	 * Creates the given oid as a plain writable number datapoint if it doesn't already exist -
-	 * but ONLY when it is EnergyFlow's own suggested default id. An oid the user explicitly
+	 * but ONLY when it is SolarCockpit's own suggested default id. An oid the user explicitly
 	 * pointed at some other (possibly foreign-adapter-owned) state is never touched.
 	 *
 	 * @param oid - the oid actually configured (or defaulted to) for this price
-	 * @param ownDefaultOid - EnergyFlow's own suggested default oid for this price
+	 * @param ownDefaultOid - SolarCockpit's own suggested default oid for this price
 	 * @param name - description to give the datapoint if it needs to be created
 	 */
 	private async ensureOwnDefaultDatapoint(oid: string, ownDefaultOid: string, name: string): Promise<void> {

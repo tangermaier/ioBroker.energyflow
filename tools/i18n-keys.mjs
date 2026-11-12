@@ -29,8 +29,8 @@ function walk(dir, include, out = []) {
 /** Layer -> source root and the call pattern whose first string literal argument is a key. */
 export const LAYERS = {
 	backend: { root: "src", include: /\.ts$/, call: /\bt(?:All)?\(\s*("(?:[^"\\]|\\.)*")/g },
-	// widgets: every "energyflow_..." string literal (tr() keys, editor labels) plus visSetLabel/visWidgetLabel (vis-2 adds the prefix)
-	widgets: { root: "src-widgets/src", include: /\.tsx?$/, call: /("energyflow_[A-Za-z0-9_-]+")/g, extra: /vis(?:Set|Widget)Label: "(\w+)"/g },
+	// widgets: every "solarcockpit_..." string literal (tr() keys, editor labels) plus visSetLabel/visWidgetLabel (vis-2 adds the prefix)
+	widgets: { root: "src-widgets/src", include: /\.tsx?$/, call: /("solarcockpit_[A-Za-z0-9_-]+")/g, extra: /vis(?:Set|Widget)Label: "(\w+)"/g },
 	scene: { root: "src-scene/src", include: /\.ts$/, call: /\bt\(\s*("(?:[^"\\]|\\.)*")/g },
 };
 
@@ -52,7 +52,7 @@ export function extractKeys(layer, base = ".") {
 			keys.add(JSON.parse(m[1]));
 		}
 		for (const m of extra ? src.matchAll(extra) : []) {
-			keys.add(`energyflow_${m[1]}`);
+			keys.add(`solarcockpit_${m[1]}`);
 		}
 	}
 	return [...keys].sort();

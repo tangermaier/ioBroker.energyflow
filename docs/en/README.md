@@ -1,4 +1,4 @@
-# EnergyFlow - setup guide
+# SolarCockpit - setup guide
 
 This guide takes you from "never seen the adapter" to a working energy dashboard. It explains
 the concepts first, then every setting, then the widgets. Deutsche Fassung: [../de/README.md](../de/README.md).
@@ -19,8 +19,8 @@ the concepts first, then every setting, then the widgets. Deutsche Fassung: [../
 
 ## 1. Concepts
 
-**Entity.** Everything EnergyFlow knows about is an *entity*: one row in the configuration table
-that points to an existing ioBroker state delivering the current power (W or kW). EnergyFlow does
+**Entity.** Everything SolarCockpit knows about is an *entity*: one row in the configuration table
+that points to an existing ioBroker state delivering the current power (W or kW). SolarCockpit does
 not talk to devices itself - it only reads states that other adapters (Shelly, Modbus, Tibber, …)
 already provide.
 
@@ -34,25 +34,25 @@ already provide.
 | Grid | connection to the public grid | smart meter, Tibber Pulse, inverter grid register |
 | Other resource | reserved for later (gas, water) | - |
 
-**Sign convention.** Inside EnergyFlow, *positive* always means **import from the grid** /
+**Sign convention.** Inside SolarCockpit, *positive* always means **import from the grid** /
 **charging the battery**; producers and consumers are positive when they produce/consume. If a
 source reports the opposite (e.g. a meter showing export as positive), tick *Invert sign*.
 
 **Aggregate meters and "rest power".** A whole-house meter (e.g. Shelly 3EM) already contains
 everything behind it. If some of those devices have their own meter (smart plugs), enter the
 aggregate meter as an entity and give each child entity the aggregate's ID as *Parent
-(aggregate) ID*. EnergyFlow then shows `restPower` = aggregate − sum of the children, so nothing
+(aggregate) ID*. SolarCockpit then shows `restPower` = aggregate − sum of the children, so nothing
 is counted twice. A producer that feeds in *behind* the house meter (balcony power plant) is
 already netted out of the aggregate's reading - tick *Netted into parent* for it.
 
 **Energy balance.** Production + grid import = consumption + battery charging + losses. If one
-measurement is unreliable, EnergyFlow can compute the grid or the battery from all the others
+measurement is unreliable, SolarCockpit can compute the grid or the battery from all the others
 ("balance"). Whatever the meters together still cannot explain is shown as **measurement
 residual** - a useful health indicator for your measurements.
 
-**Losses.** Inverters and batteries lose energy. You can enter estimated efficiencies (EnergyFlow
+**Losses.** Inverters and batteries lose energy. You can enter estimated efficiencies (SolarCockpit
 creates separate *loss* entities from them), or - for a hybrid inverter with an AC output register
-- let EnergyFlow measure the real inverter loss (DC inputs − AC output).
+- let SolarCockpit measure the real inverter loss (DC inputs − AC output).
 
 ---
 
@@ -64,7 +64,7 @@ creates separate *loss* entities from them), or - for a hybrid inverter with an 
 - **Power states** for everything you want to see (W or kW).
 - **Recommended: a history adapter** - `history`, `influxdb` (1.x or 2.x) or `sql` - with logging
   enabled for every power state you add as an entity (in the object browser: gear icon of the
-  state → enable logging). Without history EnergyFlow still works live, but there is no
+  state → enable logging). Without history SolarCockpit still works live, but there is no
   today/yesterday/7-day history, no ML forecast correction and no household load profile.
 - **Optional:** vis-2 (widgets, scene), `tibberlink` (dynamic prices).
 
@@ -74,11 +74,11 @@ creates separate *loss* entities from them), or - for a hybrid inverter with an 
 
 Version 0.1.0 is not yet in the ioBroker repository. Install the release package from GitHub:
 
-1. Open the [releases page](https://github.com/tangermaier/ioBroker.energyflow/releases) and copy
-   the link of the attached `iobroker.energyflow-<version>.tgz`.
+1. Open the [releases page](https://github.com/tangermaier/ioBroker.solarcockpit/releases) and copy
+   the link of the attached `iobroker.solarcockpit-<version>.tgz`.
 2. On the ioBroker host run `iobroker url <copied link>` - or in Admin → *Adapters* use the
    GitHub/cat icon *"Install from custom URL"* and paste the link.
-3. Add an instance of *EnergyFlow* (Admin → Adapters → EnergyFlow → "+").
+3. Add an instance of *SolarCockpit* (Admin → Adapters → SolarCockpit → "+").
 4. If you use vis-2: restart the vis-2 instance afterwards so the widgets appear.
 
 > Installing directly from the repository URL is not supported: the repository contains only
@@ -88,7 +88,7 @@ Version 0.1.0 is not yet in the ioBroker repository. Install the release package
 
 ## 4. Configuration, step by step
 
-All settings are on one page (Admin → Instances → energyflow.0 → gear icon).
+All settings are on one page (Admin → Instances → solarcockpit.0 → gear icon).
 
 ### 4.1 History data
 
@@ -96,7 +96,7 @@ All settings are on one page (Admin → Instances → energyflow.0 → gear icon
 |---|---|
 | History instance | The instance that logs your power states, e.g. `influxdb.0`, `history.0`, `sql.0`. Leave empty to run without history. |
 
-EnergyFlow reads hourly averages via the standard `getHistory` interface. Note for InfluxDB 1.x:
+SolarCockpit reads hourly averages via the standard `getHistory` interface. Note for InfluxDB 1.x:
 hours without data are filled with the previous value by that adapter.
 
 ### 4.2 Look-back (timeline)
@@ -112,7 +112,7 @@ hours without data are filled with the previous value by that adapter.
 |---|---|
 | Use dynamic prices from tibberlink | Read current and upcoming 15-minute prices from `tibberlink`. |
 | tibberlink instance / Tibber home | Which instance and which home (list is loaded live; the instance must be running). |
-| Grid purchase price state | Without Tibber: a state holding your price in ct/kWh. Leave empty and EnergyFlow creates an editable starter value under `0_userdata.0`. |
+| Grid purchase price state | Without Tibber: a state holding your price in ct/kWh. Leave empty and SolarCockpit creates an editable starter value under `0_userdata.0`. |
 | Feed-in tariff state | Your feed-in tariff in ct/kWh (fixed; with Tibber it is treated as 0 during negative spot prices). |
 
 ### 4.4 Energy plan
@@ -187,7 +187,7 @@ Save - the instance restarts. After about two minutes (first ML training) foreca
 
 **B) Balcony power plant behind the house meter.** Add it as a producer with
 *Parent (aggregate) ID* = `house` and tick *Netted into parent*. The house meter only sees the
-remaining consumption; EnergyFlow adds the balcony plant back so the consumption is correct.
+remaining consumption; SolarCockpit adds the balcony plant back so the consumption is correct.
 
 **C) Smart plugs under the house meter.** Each plug: Consumer, *Parent* = `house`. `house.restPower`
 then shows "everything else".
@@ -200,19 +200,19 @@ outage*, optional fallback = your inverter's grid register.
 
 ## 6. Widgets and the 2.5D scene
 
-Open the vis-2 editor; the widget set **EnergyFlow** contains:
+Open the vis-2 editor; the widget set **SolarCockpit** contains:
 
 | Widget | What it shows | Minimum binding |
 |---|---|---|
-| **Energy Flow Arrows** | Sankey-style flows from sources to consumers incl. losses and measurement residual; tap for full screen with *Now / Today / Yesterday / 7 days*. | Number of participants + one power state per participant (`energyflow.0.entities.<id>.power`). |
-| **Energy Flow – Forecast** | Forecast curve with actual values, weather, timeline slider, recommendation and current plan mode. | Pre-filled with `energyflow.0.*` defaults. |
+| **Energy Flow Arrows** | Sankey-style flows from sources to consumers incl. losses and measurement residual; tap for full screen with *Now / Today / Yesterday / 7 days*. | Number of participants + one power state per participant (`solarcockpit.0.entities.<id>.power`). |
+| **Forecast & weather** | Forecast curve with actual values, weather, timeline slider, recommendation and current plan mode. | Pre-filled with `solarcockpit.0.*` defaults. |
 | **Energy Plan** | Price, PV/load, planned SoC, modes and appliance window over the plan horizon; tap for full screen. | Pre-filled defaults. |
-| **Energy Flow Diagram** | Compact ring diagram (producer, grid, storage, consumer). | The four `summary.<category>.power` states (pre-filled). |
+| **Yield & energy flow** | Compact ring diagram (producer, grid, storage, consumer). | The four `summary.<category>.power` states (pre-filled). |
 
 **The 2.5D scene** is a separate page served by the adapter:
-`http://<iobroker>:8082/energyflow/index.html` (port of your `web` instance). It shows real 3D
+`http://<iobroker>:8082/solarcockpit/index.html` (port of your `web` instance). It shows real 3D
 buildings, the sun path, the forecast/actual yield as a band, building shadows and weather.
-Embed it in vis-2 with a *basic iFrame* widget on a view named **`Energyflow3D`** - the forecast
+Embed it in vis-2 with a *basic iFrame* widget on a view named **`SolarCockpit3D`** - the forecast
 card and the ring diagram open that view when tapped.
 URL parameters: `?lang=de` (language), `?lat=…&lon=…` (show another place; your own building
 shadows are hidden then).
@@ -235,7 +235,7 @@ It uses the PV forecast, the household load profile (median per hour over 28 day
 weekends separately) and your battery limits. `plan.expectedSavings` is the advantage over
 plain self-consumption.
 
-**The plan is advisory - EnergyFlow does not control your inverter.** It writes its suggestion
+**The plan is advisory - SolarCockpit does not control your inverter.** It writes its suggestion
 to `plan.*`; acting on it (manually or by your own script) is your decision.
 
 ---
@@ -281,5 +281,5 @@ needs internet access to `api.open-meteo.com`.
 **Widgets missing in vis-2.** Restart the vis-2 instance after installing/updating the adapter.
 
 **Texts in the wrong language.** Backend texts follow *Admin → System settings → Language*; the
-widgets follow the vis-2 language. After changing the system language restart the EnergyFlow,
+widgets follow the vis-2 language. After changing the system language restart the SolarCockpit,
 vis-2 and web instances.

@@ -8,7 +8,7 @@
  * and `total = energy + tax` is the gross consumer price. All three are in EUR/kWh.
  */
 
-/** One price slot as used throughout EnergyFlow - all prices in ct/kWh. */
+/** One price slot as used throughout SolarCockpit - all prices in ct/kWh. */
 export interface PriceSlot {
 	/** Slot start, absolute Unix timestamp in ms (inclusive) */
 	startTs: number;

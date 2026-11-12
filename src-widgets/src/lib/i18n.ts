@@ -40,7 +40,7 @@ export function locale(): string {
 }
 
 /**
- * Translates a key (with the "energyflow_" prefix) into the current language, replacing {name}
+ * Translates a key (with the "solarcockpit_" prefix) into the current language, replacing {name}
  * placeholders. Missing translations fall back to English, then to the key itself.
  *
  * @param key - dictionary key

@@ -9,7 +9,7 @@ import type { PlanSlot } from "./plan";
 
 /**
  * Fullscreen view of the energy plan: layer toggles, the chart and the recommendation text.
- * Shared by EnergyPlanWidget and EnergyFlowWidget.
+ * Shared by SolarCockpitPlanWidget and SolarCockpitForecastWidget.
  *
  * @param props - dialog state and plan data
  * @param props.open - whether the dialog is shown
@@ -42,7 +42,7 @@ export function EnergyPlanDialog(props: {
 		>
 			<IconButton
 				onClick={props.onClose}
-				title={tr("energyflow_rt_close_fullscreen")}
+				title={tr("solarcockpit_rt_close_fullscreen")}
 				sx={{ position: "absolute", top: 8, right: 8, zIndex: 1, fontSize: 22, color: "text.primary" }}
 			>
 				✕
@@ -50,7 +50,7 @@ export function EnergyPlanDialog(props: {
 			<div
 				style={{ width: "100%", height: "100%", boxSizing: "border-box", padding: "24px 24px 16px", display: "flex", flexDirection: "column", gap: 12 }}
 			>
-				<div style={{ fontSize: 16, fontWeight: 600, textAlign: "center" }}>{tr("energyflow_rt_energy_plan")}</div>
+				<div style={{ fontSize: 16, fontWeight: 600, textAlign: "center" }}>{tr("solarcockpit_rt_energy_plan")}</div>
 				<PlanLayerToggles
 					layers={layers}
 					onChange={setLayers}
@@ -65,7 +65,7 @@ export function EnergyPlanDialog(props: {
 				</div>
 				{props.status && props.status !== "ok" && (
 					<div style={{ fontSize: 12, textAlign: "center", opacity: 0.7 }}>
-						{props.status === "noBattery" ? tr("energyflow_rt_no_battery") : tr("energyflow_rt_no_prices")}
+						{props.status === "noBattery" ? tr("solarcockpit_rt_no_battery") : tr("solarcockpit_rt_no_prices")}
 					</div>
 				)}
 				{props.text && <div style={{ fontSize: 13, lineHeight: 1.45, textAlign: "center", maxWidth: 900, alignSelf: "center" }}>{props.text}</div>}

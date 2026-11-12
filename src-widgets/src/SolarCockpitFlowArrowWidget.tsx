@@ -228,7 +228,7 @@ function getNamespacedSvgIcon(dataUri: string, instanceId: string): { viewBox: s
 	return { viewBox: decoded.viewBox, markup };
 }
 
-interface EnergyFlowArrowRxData {
+interface SolarCockpitFlowArrowRxData {
 	participantCount: number;
 	[key: string]: unknown;
 }
@@ -631,7 +631,7 @@ function MaterialIconPickerField(props: { value: string; onChange: (value: strin
  * grouping are then read once from each state's own parent channel object (`entities.<id>`,
  * written by EntityManager), not re-entered here.
  */
-export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof VisRxWidget)<EnergyFlowArrowRxData, VisRxWidgetState> {
+export default class SolarCockpitFlowArrowWidget extends (window.visRxWidget as typeof VisRxWidget)<SolarCockpitFlowArrowRxData, VisRxWidgetState> {
 	static adapter: string;
 
 	/** oid -> fetched object metadata (color/category/parentId), refreshed on mount and whenever the configured oids change. */
@@ -649,7 +649,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 	/** channelId -> live value of `<loss channel>.power`, manually subscribed - same reasoning as restValues. */
 	private lossValues: Record<string, number> = {};
 	private lossSubscriptions: { id: string; cb: (id: string, state: ioBroker.State | null | undefined) => void }[] = [];
-	/** Adapter namespace ("energyflow.0") of the bound participants - for the summary.* states below. */
+	/** Adapter namespace ("solarcockpit.0") of the bound participants - for the summary.* states below. */
 	private namespace = "";
 	/** Live value of `summary.balanceResidual.power` (signed), undefined until the state exists - see renderDiagram's "Messabweichung". */
 	private residualLive: number | undefined;
@@ -659,7 +659,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 	/** Smoothed (animated) copy of the live values, tweened towards the real ones on every change. */
 	private displayValues: Record<string, number> = {};
 	private animationFrame: number | null = null;
-	/** Ephemeral UI state (not persisted rxData, like EnergyFlowWidget's scrub position) - whether the fullscreen dialog is open. */
+	/** Ephemeral UI state (not persisted rxData, like SolarCockpitForecastWidget's scrub position) - whether the fullscreen dialog is open. */
 	private fullscreen = false;
 
 	private openFullscreen = (): void => {
@@ -753,21 +753,21 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 	/** vis-2 widget metadata (editor attributes and preview) */
 	static getWidgetInfo(): RxWidgetInfo {
 		return {
-			id: "tplEnergyFlowArrow",
-			visSet: "energyflow",
+			id: "tplSolarCockpitFlowArrow",
+			visSet: "solarcockpit",
 			visSetLabel: "set_label",
 			visSetColor: "#ff9800",
-			visName: "EnergyFlowArrowWidget",
+			visName: "SolarCockpitFlowArrowWidget",
 			visWidgetLabel: "widget_label_arrow",
 			visAttrs: [
 				{
 					name: "count",
-					label: "energyflow_group_participants",
+					label: "solarcockpit_group_participants",
 					fields: [
 						{
 							name: "participantCount",
 							type: "number",
-							label: "energyflow_participant_count",
+							label: "solarcockpit_participant_count",
 							min: 0,
 							max: MAX_PARTICIPANTS,
 							default: 6,
@@ -776,12 +776,12 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 				},
 				{
 					name: "restCount",
-					label: "energyflow_group_rest_icons",
+					label: "solarcockpit_group_rest_icons",
 					fields: [
 						{
 							name: "restIconCount",
 							type: "number",
-							label: "energyflow_rest_icon_count",
+							label: "solarcockpit_rest_icon_count",
 							min: 0,
 							max: MAX_REST_ICONS,
 							default: 0,
@@ -790,18 +790,18 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 				},
 				{
 					name: "restIcon",
-					label: "energyflow_group_rest_icon",
+					label: "solarcockpit_group_rest_icon",
 					indexFrom: 1,
 					indexTo: "restIconCount",
 					fields: [
-						{ name: "parentId", type: "text", label: "energyflow_rest_icon_parent_id" },
+						{ name: "parentId", type: "text", label: "solarcockpit_rest_icon_parent_id" },
 						{
 							// Named "restIconValue", not "icon" - an indexed field's data key is just
 							// `${name}${index}` with no per-group namespacing, and the participant group
 							// below already owns `icon1..iconN` for its own (differently-indexed) icons.
 							name: "restIconValue",
 							type: "custom",
-							label: "energyflow_participant_icon",
+							label: "solarcockpit_participant_icon",
 							component: (field, data, onDataChange, props) => {
 								const fieldName = (field as { name?: string }).name ?? "restIconValue";
 								return (
@@ -818,15 +818,15 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 				},
 				{
 					name: "participant",
-					label: "energyflow_group_participant",
+					label: "solarcockpit_group_participant",
 					indexFrom: 1,
 					indexTo: "participantCount",
 					fields: [
-						{ name: "oid", type: "id", label: "energyflow_participant_oid", filter: "state" },
+						{ name: "oid", type: "id", label: "solarcockpit_participant_oid", filter: "state" },
 						{
 							name: "icon",
 							type: "custom",
-							label: "energyflow_participant_icon",
+							label: "solarcockpit_participant_icon",
 							component: (field, data, onDataChange, props) => {
 								const fieldName = (field as { name?: string }).name ?? "icon";
 								return (
@@ -839,22 +839,22 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 								);
 							},
 						},
-						{ name: "image", type: "image", label: "energyflow_participant_image" },
-						{ name: "size", type: "number", label: "energyflow_participant_size", default: 60, min: 16, max: 128 },
+						{ name: "image", type: "image", label: "solarcockpit_participant_image" },
+						{ name: "size", type: "number", label: "solarcockpit_participant_size", default: 60, min: 16, max: 128 },
 					],
 				},
 			],
-			visPrev: "widgets/energyflow/img/vis-energyflow-arrow.png",
+			visPrev: "widgets/solarcockpit/img/vis-solarcockpit-flowarrow.png",
 		};
 	}
 
 	getWidgetInfo(): RxWidgetInfo {
-		return EnergyFlowArrowWidget.getWidgetInfo();
+		return SolarCockpitFlowArrowWidget.getWidgetInfo();
 	}
 
 	/** Prefix vis-2 prepends to this widget set's dictionary keys */
 	static getI18nPrefix(): string {
-		return `${EnergyFlowArrowWidget.adapter}_`;
+		return `${SolarCockpitFlowArrowWidget.adapter}_`;
 	}
 
 	private getSocket(): LooseSocket {
@@ -1086,7 +1086,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 		);
 
 		this.clearRestSubscriptions();
-		// namespace ("energyflow.0") per parentId, taken from a child that actually points at it -
+		// namespace ("solarcockpit.0") per parentId, taken from a child that actually points at it -
 		// avoids assuming every bound participant lives under the same adapter instance.
 		const namespaceByParent = new Map<string, string>();
 		for (const m of Object.values(meta)) {
@@ -1272,7 +1272,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 			candidates.push({
 				key: cfg.oid,
 				// While the grid measurement is down the value is the (much less reliable) balance - say so.
-				label: meta.category === "grid" && this.gridEstimated ? tr("energyflow_rt_grid_estimated", { name: meta.name }) : meta.name,
+				label: meta.category === "grid" && this.gridEstimated ? tr("solarcockpit_rt_grid_estimated", { name: meta.name }) : meta.name,
 				iconSrc: cfg.image || cfg.icon,
 				size: cfg.size,
 				color: meta.color,
@@ -1284,7 +1284,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 
 		// Auto "Sonstiges" arrow for every distinct parent that has at least one selected child -
 		// same category/side as its children, sourced from the parent's own restPower + color, with an
-		// optional icon override (keyed by parent ID) from the "energyflow_group_rest_icon" field group -
+		// optional icon override (keyed by parent ID) from the "solarcockpit_group_rest_icon" field group -
 		// this arrow isn't a directly configured participant, so it has no `icon<N>` field of its own.
 		const restIconOverrides = this.getRestIconOverrides();
 		const handledParents = new Set<string>();
@@ -1295,7 +1295,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 				const parent = this.parentMeta[c.parentId];
 				restItems.push({
 					key: `rest:${c.parentId}`,
-					label: parent ? tr("energyflow_rt_other_of", { name: parent.name }) : tr("energyflow_rt_other"),
+					label: parent ? tr("solarcockpit_rt_other_of", { name: parent.name }) : tr("solarcockpit_rt_other"),
 					iconSrc: restIconOverrides[c.parentId] || "",
 					size: 40,
 					color: parent?.color || REST_COLOR_FALLBACK,
@@ -1326,7 +1326,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 		const producerLossTotal = lossEntries
 			.filter(m => m.kind === "producerLoss" || m.kind === "inverterLoss")
 			.reduce((sum, m) => sum + this.lossValueFor(m.channelId), 0);
-		const producerLossLabel = lossEntries.some(m => m.kind === "inverterLoss") ? tr("energyflow_rt_inverter_loss") : tr("energyflow_rt_loss");
+		const producerLossLabel = lossEntries.some(m => m.kind === "inverterLoss") ? tr("solarcockpit_rt_inverter_loss") : tr("solarcockpit_rt_loss");
 		const chargeLossMeta = lossEntries.find(m => m.kind === "chargeLoss");
 		const dischargeLossMeta = lossEntries.find(m => m.kind === "dischargeLoss");
 		const chargeLossValue = chargeLossMeta ? this.lossValueFor(chargeLossMeta.channelId) : 0;
@@ -1405,7 +1405,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 		});
 
 		const gradStops = sliceGradientStops(leftItems.length ? leftItems : rightItems, totalPre || totalPost);
-		const gradId = `energyflow-arrow-grad-${keyPrefix}`;
+		const gradId = `solarcockpit-arrow-grad-${keyPrefix}`;
 
 		// Every flow shape below also strokes itself with its own fill (1px) - adjacent shapes that
 		// share an edge (e.g. the elbow path meeting the extra-post rect) otherwise render a visible
@@ -1595,7 +1595,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 					storageY - 70,
 					thickness,
 					LOSS_COLOR,
-					tr("energyflow_rt_charge_loss"),
+					tr("solarcockpit_rt_charge_loss"),
 					chargeLossValue,
 					keyPrefix,
 					formatValue,
@@ -1614,7 +1614,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 					storageY - 70,
 					thickness,
 					LOSS_COLOR,
-					tr("energyflow_rt_discharge_loss"),
+					tr("solarcockpit_rt_discharge_loss"),
 					dischargeLossValue,
 					keyPrefix,
 					formatValue,
@@ -1638,7 +1638,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 		if (residualValue > diagnosticDeadband) {
 			contentTop = Math.min(contentTop, peelOffTop);
 			const direction =
-				backendResidual === undefined ? "" : backendResidual > 0 ? tr("energyflow_rt_residual_more_supply") : tr("energyflow_rt_residual_more_use");
+				backendResidual === undefined ? "" : backendResidual > 0 ? tr("solarcockpit_rt_residual_more_supply") : tr("solarcockpit_rt_residual_more_use");
 			pushPeelOff(
 				flow,
 				icons,
@@ -1649,7 +1649,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 				barTopY - PEEL_OFF_RISE,
 				Math.max(1.5, residualThickness),
 				REST_COLOR_FALLBACK,
-				tr("energyflow_rt_residual"),
+				tr("solarcockpit_rt_residual"),
 				residualValue,
 				keyPrefix,
 				formatValue,
@@ -1658,7 +1658,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 			const residualIcon = icons.pop();
 			icons.push(
 				<g key={`${keyPrefix}-residual-tip`}>
-					<title>{`${tr("energyflow_rt_residual_explained")}${direction ? `\n${direction}` : ""}\n${tr("energyflow_rt_residual_selfuse")}`}</title>
+					<title>{`${tr("solarcockpit_rt_residual_explained")}${direction ? `\n${direction}` : ""}\n${tr("solarcockpit_rt_residual_selfuse")}`}</title>
 					{residualIcon}
 				</g>,
 			);
@@ -1728,7 +1728,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 		if (!compactDiagram) {
 			return (
 				<Card sx={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", p: 2, boxSizing: "border-box" }}>
-					<span style={{ opacity: 0.6, textAlign: "center" }}>{tr("energyflow_rt_configure_participants")}</span>
+					<span style={{ opacity: 0.6, textAlign: "center" }}>{tr("solarcockpit_rt_configure_participants")}</span>
 				</Card>
 			);
 		}
@@ -1742,7 +1742,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 					<CardActionArea
 						onClick={this.openFullscreen}
 						disabled={this.props.editMode}
-						title={tr("energyflow_rt_open_fullscreen")}
+						title={tr("solarcockpit_rt_open_fullscreen")}
 						sx={{ width: "100%", height: "100%", "&.Mui-disabled": { opacity: 1 } }}
 					>
 						{compactDiagram}
@@ -1755,7 +1755,7 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 				>
 					<IconButton
 						onClick={this.closeFullscreen}
-						title={tr("energyflow_rt_close_fullscreen")}
+						title={tr("solarcockpit_rt_close_fullscreen")}
 						sx={{ position: "absolute", top: 8, right: 8, zIndex: 1, fontSize: 22, color: "text.primary" }}
 					>
 						✕
@@ -1772,10 +1772,10 @@ export default class EnergyFlowArrowWidget extends (window.visRxWidget as typeof
 							}}
 							sx={{ alignSelf: "center" }}
 						>
-							<ToggleButton value="live">{tr("energyflow_rt_now")}</ToggleButton>
-							<ToggleButton value="today">{tr("energyflow_rt_today")}</ToggleButton>
-							<ToggleButton value="yesterday">{tr("energyflow_rt_yesterday")}</ToggleButton>
-							<ToggleButton value="last7days">{tr("energyflow_rt_7days")}</ToggleButton>
+							<ToggleButton value="live">{tr("solarcockpit_rt_now")}</ToggleButton>
+							<ToggleButton value="today">{tr("solarcockpit_rt_today")}</ToggleButton>
+							<ToggleButton value="yesterday">{tr("solarcockpit_rt_yesterday")}</ToggleButton>
+							<ToggleButton value="last7days">{tr("solarcockpit_rt_7days")}</ToggleButton>
 						</ToggleButtonGroup>
 						<div style={{ flex: 1, minHeight: 0 }}>{this.renderDiagram(`${props.id}-fs`)}</div>
 					</div>
@@ -1856,7 +1856,7 @@ function renderIcon(
 				textAnchor="middle"
 				fontSize={12.5}
 				fontWeight={700}
-				fill="var(--energyflow-label, #37474f)"
+				fill="var(--solarcockpit-label, #37474f)"
 			>
 				{item.label}
 			</text>
@@ -1865,7 +1865,7 @@ function renderIcon(
 				y={valueY}
 				textAnchor="middle"
 				fontSize={11.5}
-				fill="var(--energyflow-value, #607083)"
+				fill="var(--solarcockpit-value, #607083)"
 			>
 				{formatValue(item.value)}
 			</text>

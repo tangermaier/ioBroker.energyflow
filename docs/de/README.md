@@ -1,4 +1,4 @@
-# EnergyFlow – Einrichtungsanleitung
+# SolarCockpit – Einrichtungsanleitung
 
 Diese Anleitung führt dich vom ersten Kontakt mit dem Adapter bis zum fertigen Energie-Dashboard.
 Erst die Begriffe, dann jede Einstellung, dann die Widgets. English version: [../en/README.md](../en/README.md).
@@ -19,8 +19,8 @@ Erst die Begriffe, dann jede Einstellung, dann die Widgets. English version: [..
 
 ## 1. Begriffe
 
-**Entity.** Alles, was EnergyFlow kennt, ist eine *Entity*: eine Zeile in der Konfigurationstabelle,
-die auf einen vorhandenen ioBroker-State mit der aktuellen Leistung (W oder kW) zeigt. EnergyFlow
+**Entity.** Alles, was SolarCockpit kennt, ist eine *Entity*: eine Zeile in der Konfigurationstabelle,
+die auf einen vorhandenen ioBroker-State mit der aktuellen Leistung (W oder kW) zeigt. SolarCockpit
 spricht selbst mit keinem Gerät – es liest nur States, die andere Adapter (Shelly, Modbus, Tibber …)
 bereits liefern.
 
@@ -34,19 +34,19 @@ bereits liefern.
 | Netz | Anschluss ans öffentliche Netz | Smart Meter, Tibber Pulse, Netzregister des Wechselrichters |
 | Sonstige Ressource | für später reserviert (Gas, Wasser) | – |
 
-**Vorzeichen.** In EnergyFlow bedeutet *positiv* immer **Netzbezug** bzw. **Akku laden**; Erzeuger
+**Vorzeichen.** In SolarCockpit bedeutet *positiv* immer **Netzbezug** bzw. **Akku laden**; Erzeuger
 und Verbraucher sind positiv, wenn sie erzeugen bzw. verbrauchen. Meldet eine Quelle es andersherum
 (z. B. Einspeisung positiv), setze *Vorzeichen umkehren*.
 
 **Sammelmessung und „Restleistung“.** Ein Hauszähler (z. B. Shelly 3EM) enthält bereits alles, was
 dahinter hängt. Haben einige dieser Geräte einen eigenen Zähler (Smart-Plugs), lege den Hauszähler
 als Entity an und trage bei jedem Kind die ID des Hauszählers als *Parent (Sammelmessung) ID* ein.
-EnergyFlow zeigt dann `restPower` = Sammelmessung − Summe der Kinder; nichts wird doppelt gezählt.
+SolarCockpit zeigt dann `restPower` = Sammelmessung − Summe der Kinder; nichts wird doppelt gezählt.
 Ein Erzeuger, der *hinter* dem Hauszähler einspeist (Balkonkraftwerk), steckt bereits verrechnet
 im Zählerwert – setze bei ihm *In Parent verrechnet*.
 
 **Energiebilanz.** Erzeugung + Netzbezug = Verbrauch + Akkuladung + Verluste. Ist eine Messung
-unzuverlässig, kann EnergyFlow Netz oder Akku aus allen anderen berechnen („Bilanz“). Was die
+unzuverlässig, kann SolarCockpit Netz oder Akku aus allen anderen berechnen („Bilanz“). Was die
 Messungen zusammen dann noch nicht erklären, zeigt die **Messabweichung** – ein guter Gradmesser
 für die Qualität deiner Messungen.
 
@@ -64,7 +64,7 @@ AC-Ausgangsregister – den echten Wechselrichter-Verlust messen lassen (DC-Eing
 - **Leistungs-States** für alles, was du sehen willst (W oder kW).
 - **Empfohlen: ein History-Adapter** – `history`, `influxdb` (1.x oder 2.x) oder `sql` – mit
   aktivierter Aufzeichnung für jeden Leistungs-State, den du als Entity einträgst (Objektbrowser:
-  Zahnrad am State → Aufzeichnung aktivieren). Ohne Historie läuft EnergyFlow live, aber ohne
+  Zahnrad am State → Aufzeichnung aktivieren). Ohne Historie läuft SolarCockpit live, aber ohne
   Heute/Gestern/7-Tage-Werte, ohne ML-Korrektur der Prognose und ohne Lastprofil.
 - **Optional:** vis-2 (Widgets, Szene), `tibberlink` (dynamische Preise).
 
@@ -74,11 +74,11 @@ AC-Ausgangsregister – den echten Wechselrichter-Verlust messen lassen (DC-Eing
 
 Version 0.1.0 ist noch nicht im ioBroker-Repository. Installiere das Release-Paket von GitHub:
 
-1. Öffne die [Releases-Seite](https://github.com/tangermaier/ioBroker.energyflow/releases) und
-   kopiere den Link der angehängten Datei `iobroker.energyflow-<version>.tgz`.
+1. Öffne die [Releases-Seite](https://github.com/tangermaier/ioBroker.solarcockpit/releases) und
+   kopiere den Link der angehängten Datei `iobroker.solarcockpit-<version>.tgz`.
 2. Auf dem ioBroker-Host `iobroker url <kopierter Link>` ausführen – oder in Admin → *Adapter* über
    das GitHub-/Katzen-Symbol *„Installieren aus eigener URL“* den Link einfügen.
-3. Instanz anlegen (Admin → Adapter → EnergyFlow → „+“).
+3. Instanz anlegen (Admin → Adapter → SolarCockpit → „+“).
 4. Mit vis-2: die vis-2-Instanz danach neu starten, damit die Widgets erscheinen.
 
 > Eine Installation direkt von der Repository-URL wird nicht unterstützt: Das Repository enthält
@@ -88,7 +88,7 @@ Version 0.1.0 ist noch nicht im ioBroker-Repository. Installiere das Release-Pak
 
 ## 4. Konfiguration Schritt für Schritt
 
-Alle Einstellungen liegen auf einer Seite (Admin → Instanzen → energyflow.0 → Zahnrad).
+Alle Einstellungen liegen auf einer Seite (Admin → Instanzen → solarcockpit.0 → Zahnrad).
 
 ### 4.1 Verlaufsdaten
 
@@ -96,7 +96,7 @@ Alle Einstellungen liegen auf einer Seite (Admin → Instanzen → energyflow.0 
 |---|---|
 | History-Instanz | Die Instanz, die deine Leistungs-States aufzeichnet, z. B. `influxdb.0`, `history.0`, `sql.0`. Leer = ohne Historie. |
 
-EnergyFlow liest Stundenmittel über die Standardschnittstelle `getHistory`. Hinweis zu InfluxDB 1.x:
+SolarCockpit liest Stundenmittel über die Standardschnittstelle `getHistory`. Hinweis zu InfluxDB 1.x:
 Stunden ohne Daten füllt dieser Adapter mit dem Vorwert auf.
 
 ### 4.2 Rückblick (Zeitregler)
@@ -112,7 +112,7 @@ Stunden ohne Daten füllt dieser Adapter mit dem Vorwert auf.
 |---|---|
 | Dynamische Preise aus Tibberlink verwenden | Aktuelle und kommende 15-Minuten-Preise aus `tibberlink` lesen. |
 | Tibberlink-Instanz / Tibber-Zuhause | Welche Instanz und welches Zuhause (Liste wird live geladen; die Instanz muss laufen). |
-| Netzbezugspreis-State | Ohne Tibber: State mit deinem Preis in ct/kWh. Leer lassen, dann legt EnergyFlow einen editierbaren Startwert unter `0_userdata.0` an. |
+| Netzbezugspreis-State | Ohne Tibber: State mit deinem Preis in ct/kWh. Leer lassen, dann legt SolarCockpit einen editierbaren Startwert unter `0_userdata.0` an. |
 | Einspeisevergütungs-State | Deine Vergütung in ct/kWh (fest; mit Tibber bei negativen Börsenpreisen als 0 behandelt). |
 
 ### 4.4 Energieplan
@@ -187,7 +187,7 @@ Prognose und Plan.
 | `haus` | Verbraucher | Hauszähler (z. B. Shelly 3EM) | |
 
 **B) Balkonkraftwerk hinter dem Hauszähler.** Als Erzeuger mit *Parent* = `haus` anlegen und
-*In Parent verrechnet* setzen. Der Hauszähler sieht nur den Restverbrauch; EnergyFlow rechnet das
+*In Parent verrechnet* setzen. Der Hauszähler sieht nur den Restverbrauch; SolarCockpit rechnet das
 Balkonkraftwerk wieder hinzu, damit der Verbrauch stimmt.
 
 **C) Smart-Plugs unter dem Hauszähler.** Jeder Plug: Verbraucher, *Parent* = `haus`.
@@ -201,19 +201,19 @@ Leistungs-State = `…powerConsumption`, Einspeise-State = `…powerProduction`,
 
 ## 6. Widgets und 2,5D-Szene
 
-Im vis-2-Editor enthält das Widget-Set **EnergyFlow**:
+Im vis-2-Editor enthält das Widget-Set **SolarCockpit**:
 
 | Widget | Zeigt | Mindest-Verknüpfung |
 |---|---|---|
-| **Energy Flow Arrows** | Flüsse von den Quellen zu den Verbrauchern inkl. Verlusten und Messabweichung; Antippen öffnet das Vollbild mit *Jetzt / Heute / Gestern / 7 Tage*. | Anzahl Teilnehmer + je Teilnehmer ein Leistungs-State (`energyflow.0.entities.<id>.power`). |
-| **Energy Flow – Forecast** | Prognosekurve mit Ist-Werten, Wetter, Zeitregler, Empfehlung und aktuellem Planmodus. | Mit `energyflow.0.*`-Standardwerten vorbelegt. |
-| **Energy Plan** | Preis, PV/Last, geplanter Ladestand, Modi und Verbraucher-Fenster über den Planungshorizont; Antippen öffnet das Vollbild. | Vorbelegt. |
-| **Energy Flow Diagram** | Kompaktes Ringdiagramm (Erzeuger, Netz, Speicher, Verbraucher). | Die vier `summary.<kategorie>.power`-States (vorbelegt). |
+| **Energiefluss-Pfeile** | Flüsse von den Quellen zu den Verbrauchern inkl. Verlusten und Messabweichung; Antippen öffnet das Vollbild mit *Jetzt / Heute / Gestern / 7 Tage*. | Anzahl Teilnehmer + je Teilnehmer ein Leistungs-State (`solarcockpit.0.entities.<id>.power`). |
+| **Prognose & Wetter** | Prognosekurve mit Ist-Werten, Wetter, Zeitregler, Empfehlung und aktuellem Planmodus. | Mit `solarcockpit.0.*`-Standardwerten vorbelegt. |
+| **Energieplan** | Preis, PV/Last, geplanter Ladestand, Modi und Verbraucher-Fenster über den Planungshorizont; Antippen öffnet das Vollbild. | Vorbelegt. |
+| **Ertrag & Energiefluss** | Kompaktes Ringdiagramm (Erzeuger, Netz, Speicher, Verbraucher). | Die vier `summary.<kategorie>.power`-States (vorbelegt). |
 
 **Die 2,5D-Szene** ist eine eigene Seite des Adapters:
-`http://<iobroker>:8082/energyflow/index.html` (Port deiner `web`-Instanz). Sie zeigt echte
+`http://<iobroker>:8082/solarcockpit/index.html` (Port deiner `web`-Instanz). Sie zeigt echte
 3D-Gebäude, die Sonnenbahn, Prognose und Ist-Ertrag als Band, Gebäudeschatten und das Wetter.
-Binde sie in vis-2 mit einem *basic iFrame*-Widget auf einer View namens **`Energyflow3D`** ein –
+Binde sie in vis-2 mit einem *basic iFrame*-Widget auf einer View namens **`SolarCockpit3D`** ein –
 Prognose-Karte und Ringdiagramm öffnen diese View beim Antippen.
 URL-Parameter: `?lang=en` (Sprache), `?lat=…&lon=…` (anderen Ort zeigen; die eigenen
 Gebäudeschatten werden dann ausgeblendet).
@@ -236,7 +236,7 @@ Er nutzt die PV-Prognose, das Lastprofil des Haushalts (Median je Stunde über 2
 Wochenende getrennt) und deine Akku-Grenzen. `plan.expectedSavings` ist der Vorteil gegenüber
 reinem Eigenverbrauch.
 
-**Der Plan ist nur beratend – EnergyFlow steuert deinen Wechselrichter nicht.** Er schreibt seinen
+**Der Plan ist nur beratend – SolarCockpit steuert deinen Wechselrichter nicht.** Er schreibt seinen
 Vorschlag nach `plan.*`; ob und wie du ihn umsetzt (manuell oder per eigenem Skript), entscheidest du.
 
 ---
@@ -282,5 +282,5 @@ verwendeten Leistungs-State aktiv? Im Adapter-Log nach `getHistory`-Fehlern such
 **Widgets fehlen in vis-2.** Nach Installation/Update die vis-2-Instanz neu starten.
 
 **Texte in der falschen Sprache.** Backend-Texte folgen *Admin → Systemeinstellungen → Sprache*,
-die Widgets der vis-2-Sprache. Nach einer Sprachänderung die Instanzen von EnergyFlow, vis-2 und
+die Widgets der vis-2-Sprache. Nach einer Sprachänderung die Instanzen von SolarCockpit, vis-2 und
 web neu starten.

@@ -55,7 +55,7 @@ export const MODE_STYLE: Record<PlanMode, { color: string }> = {
  * @param mode - plan mode
  */
 export function modeLabel(mode: PlanMode): string {
-	return tr(`energyflow_rt_mode_${mode}`);
+	return tr(`solarcockpit_rt_mode_${mode}`);
 }
 
 const LEVELS = ["VERY_CHEAP", "CHEAP", "NORMAL", "EXPENSIVE", "VERY_EXPENSIVE"];
@@ -66,7 +66,7 @@ const LEVELS = ["VERY_CHEAP", "CHEAP", "NORMAL", "EXPENSIVE", "VERY_EXPENSIVE"];
  * @param level - Tibber level
  */
 export function levelLabel(level: string): string {
-	return LEVELS.includes(level) ? tr(`energyflow_rt_level_${level}`) : level;
+	return LEVELS.includes(level) ? tr(`solarcockpit_rt_level_${level}`) : level;
 }
 
 /**
@@ -130,10 +130,10 @@ export function relativeTime(ts: number): string {
 	};
 	const days = Math.round((dayStart(ts) - dayStart(Date.now())) / 86400000);
 	if (days === 0) {
-		return tr("energyflow_rt_today_at", { time: hhmm(ts) });
+		return tr("solarcockpit_rt_today_at", { time: hhmm(ts) });
 	}
 	if (days === 1) {
-		return tr("energyflow_rt_tomorrow_at", { time: hhmm(ts) });
+		return tr("solarcockpit_rt_tomorrow_at", { time: hhmm(ts) });
 	}
 	return `${dayLabel(ts)} ${hhmm(ts)}`;
 }

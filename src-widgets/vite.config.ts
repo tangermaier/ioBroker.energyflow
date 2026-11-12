@@ -10,13 +10,13 @@ const config = {
 	plugins: [
 		federation({
 			manifest: true,
-			name: "energyflowWidgets",
+			name: "solarcockpitWidgets",
 			filename: "customWidgets.js",
 			exposes: {
-				"./EnergyFlowWidget": "./src/EnergyFlowWidget",
-				"./EnergyFlowDiagramWidget": "./src/EnergyFlowDiagramWidget",
-				"./EnergyFlowArrowWidget": "./src/EnergyFlowArrowWidget",
-				"./EnergyPlanWidget": "./src/EnergyPlanWidget",
+				"./SolarCockpitForecastWidget": "./src/SolarCockpitForecastWidget",
+				"./SolarCockpitYieldWidget": "./src/SolarCockpitYieldWidget",
+				"./SolarCockpitFlowArrowWidget": "./src/SolarCockpitFlowArrowWidget",
+				"./SolarCockpitPlanWidget": "./src/SolarCockpitPlanWidget",
 				"./translations": "./src/translations",
 			},
 			remotes: {},

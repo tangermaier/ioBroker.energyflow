@@ -1,12 +1,12 @@
-![Logo](admin/energyflow.png)
+![Logo](admin/solarcockpit.png)
 
-# ioBroker.energyflow
+# ioBroker.solarcockpit
 
 ![License](https://img.shields.io/badge/license-GPL--3.0--only-blue.svg)
-[![Test and Release](https://github.com/tangermaier/ioBroker.energyflow/actions/workflows/test-and-release.yml/badge.svg)](https://github.com/tangermaier/ioBroker.energyflow/actions/workflows/test-and-release.yml)
+[![Test and Release](https://github.com/tangermaier/ioBroker.solarcockpit/actions/workflows/test-and-release.yml/badge.svg)](https://github.com/tangermaier/ioBroker.solarcockpit/actions/workflows/test-and-release.yml)
 
 **Energy dashboard for ioBroker.** Describe your producers (PV strings, balcony power plant),
-consumers, battery storage and grid connection once - EnergyFlow combines them into one consistent
+consumers, battery storage and grid connection once - SolarCockpit combines them into one consistent
 energy balance, visualizes the flows in vis-2, forecasts your PV yield and suggests when to use,
 store or export energy.
 
@@ -54,7 +54,7 @@ Inspired by Home Assistant's Energy Dashboard and by
    (one row per meter: ID, name, category, power state).
 3. Make sure the location is set in *System settings* (needed for the forecast and the scene).
 4. Optional: configure prices (fixed states or Tibber) for the energy plan.
-5. In vis-2, drag the *EnergyFlow* widgets onto a view.
+5. In vis-2, drag the *SolarCockpit* widgets onto a view.
 
 **Full setup guide:** [English](docs/en/README.md) · [Deutsch](docs/de/README.md)
 
@@ -97,7 +97,7 @@ using a fixed glossary - corrections by native speakers are very welcome (pull r
 
 ## License
 
-Copyright (C) 2026 tangermaier
+Copyright (C) 2026 tangermaier <tangermaier.dev@gmx.de>
 
 This program is free software: you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation, version 3.

@@ -1,5 +1,5 @@
 {
-	"title": "EnergyFlow 场景",
+	"title": "SolarCockpit 场景",
 	"back": "← 返回",
 	"no_location": "system.config 中未配置位置（Admin > 系统设置）。",
 	"night": "夜间",

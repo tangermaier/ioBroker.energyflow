@@ -12,7 +12,7 @@ import { getSunPosition } from "./sunPosition";
 import { weatherLayers } from "./weather";
 import { WeatherFx } from "./weatherFx";
 
-const ADAPTER = "energyflow.0";
+const ADAPTER = "solarcockpit.0";
 const MAP_STYLE = "https://tiles.openfreemap.org/styles/liberty";
 const DEG2RAD = Math.PI / 180;
 

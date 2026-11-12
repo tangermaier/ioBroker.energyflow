@@ -22,12 +22,12 @@ export interface PlanLayers {
 export const ALL_LAYERS: PlanLayers = { price: true, pvLoad: true, soc: true, modes: true, marginal: false, flex: true };
 
 const LAYER_LABELS: Record<keyof PlanLayers, string> = {
-	price: "energyflow_rt_layer_price",
-	pvLoad: "energyflow_rt_layer_pvLoad",
-	soc: "energyflow_rt_layer_soc",
-	modes: "energyflow_rt_layer_modes",
-	marginal: "energyflow_rt_layer_marginal",
-	flex: "energyflow_rt_layer_flex",
+	price: "solarcockpit_rt_layer_price",
+	pvLoad: "solarcockpit_rt_layer_pvLoad",
+	soc: "solarcockpit_rt_layer_soc",
+	modes: "solarcockpit_rt_layer_modes",
+	marginal: "solarcockpit_rt_layer_marginal",
+	flex: "solarcockpit_rt_layer_flex",
 };
 
 /** Colors - chosen to stay readable on light and dark vis-2 themes. */
@@ -39,9 +39,9 @@ const C = {
 	load: "#8892a0",
 	soc: "#06d6a0",
 	flex: "#4cc9f0",
-	axis: "var(--energyflow-label, #8892a0)",
-	text: "var(--energyflow-label, #37474f)",
-	now: "var(--energyflow-value, #102027)",
+	axis: "var(--solarcockpit-label, #8892a0)",
+	text: "var(--solarcockpit-label, #37474f)",
+	now: "var(--solarcockpit-value, #102027)",
 };
 
 interface Props {
@@ -94,7 +94,7 @@ function niceMax(v: number): number {
  * The advisory energy plan as a stacked-band SVG chart: prices (step line, feed-in, optional
  * marginal cost), PV forecast vs. expected load, planned SoC and a mode color band, sharing one
  * time axis with "now" and midnight markers. Hover/tap on a slot shows its details including the
- * planner's reason. Shared by EnergyPlanWidget and EnergyFlowWidget's fullscreen dialog.
+ * planner's reason. Shared by SolarCockpitPlanWidget and SolarCockpitForecastWidget's fullscreen dialog.
  *
  * @param props - slots, enabled layers, optional flex window, compact flag
  */
@@ -112,7 +112,7 @@ export function EnergyPlanChart(props: Props): React.JSX.Element {
 					ref={ref}
 					style={{ flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, opacity: 0.6 }}
 				>
-					{slots.length === 0 ? tr("energyflow_rt_no_plan") : ""}
+					{slots.length === 0 ? tr("solarcockpit_rt_no_plan") : ""}
 				</div>
 			</div>
 		);
@@ -172,7 +172,7 @@ export function EnergyPlanChart(props: Props): React.JSX.Element {
 			/>,
 		);
 		// Always label the window with its time - left of the shading if it sits near the right edge.
-		const label = compact ? `${hhmm(flexStart)}–${hhmm(flexEnd)}` : tr("energyflow_rt_appliance_window", { start: hhmm(flexStart), end: hhmm(flexEnd) });
+		const label = compact ? `${hhmm(flexStart)}–${hhmm(flexEnd)}` : tr("solarcockpit_rt_appliance_window", { start: hhmm(flexStart), end: hhmm(flexEnd) });
 		const labelW = label.length * font * 0.55;
 		const rightAligned = fx + labelW + 4 > w - padR;
 		elements.push(
@@ -613,18 +613,18 @@ export function EnergyPlanChart(props: Props): React.JSX.Element {
 							boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
 						}}
 					>
-						<div style={{ fontWeight: 600 }}>{tr("energyflow_rt_slot_time", { from: relativeTime(hovered.start), to: hhmm(hovered.end) })}</div>
+						<div style={{ fontWeight: 600 }}>{tr("solarcockpit_rt_slot_time", { from: relativeTime(hovered.start), to: hhmm(hovered.end) })}</div>
 						<div>
 							<span style={{ color: MODE_STYLE[hovered.mode].color }}>■</span> {modeLabel(hovered.mode)} ·{" "}
-							{tr("energyflow_rt_soc_value", { soc: de(hovered.soc, 0) })}
+							{tr("solarcockpit_rt_soc_value", { soc: de(hovered.soc, 0) })}
 						</div>
 						<div>
-							{tr("energyflow_rt_price_value", { price: de(hovered.price, 1) })}
-							{hovered.level ? ` (${levelLabel(hovered.level)})` : ""} · {tr("energyflow_rt_feedin_value", { price: de(hovered.feedIn, 1) })}
+							{tr("solarcockpit_rt_price_value", { price: de(hovered.price, 1) })}
+							{hovered.level ? ` (${levelLabel(hovered.level)})` : ""} · {tr("solarcockpit_rt_feedin_value", { price: de(hovered.feedIn, 1) })}
 						</div>
-						<div>{tr("energyflow_rt_marginal_value", { price: de(hovered.marginal, 1) })}</div>
+						<div>{tr("solarcockpit_rt_marginal_value", { price: de(hovered.marginal, 1) })}</div>
 						<div>
-							{tr("energyflow_rt_flows_value", {
+							{tr("solarcockpit_rt_flows_value", {
 								pv: de(hovered.pv / 1000, 1),
 								load: de(hovered.load / 1000, 1),
 								grid: de(hovered.grid / 1000, 1),
@@ -641,20 +641,20 @@ export function EnergyPlanChart(props: Props): React.JSX.Element {
 					{layers.price && (
 						<Legend
 							color={C.price}
-							label={tr("energyflow_rt_layer_price")}
+							label={tr("solarcockpit_rt_layer_price")}
 						/>
 					)}
 					{layers.price && (
 						<Legend
 							color={C.feedIn}
-							label={tr("energyflow_rt_legend_feedin")}
+							label={tr("solarcockpit_rt_legend_feedin")}
 							dashed
 						/>
 					)}
 					{layers.price && layers.marginal && (
 						<Legend
 							color={C.marginal}
-							label={tr("energyflow_rt_layer_marginal")}
+							label={tr("solarcockpit_rt_layer_marginal")}
 							dashed
 						/>
 					)}
@@ -667,13 +667,13 @@ export function EnergyPlanChart(props: Props): React.JSX.Element {
 					{layers.pvLoad && (
 						<Legend
 							color={C.load}
-							label={tr("energyflow_rt_legend_load")}
+							label={tr("solarcockpit_rt_legend_load")}
 						/>
 					)}
 					{layers.soc && (
 						<Legend
 							color={C.soc}
-							label={tr("energyflow_rt_layer_soc")}
+							label={tr("solarcockpit_rt_layer_soc")}
 						/>
 					)}
 					{layers.modes &&

@@ -1,4 +1,4 @@
-// Copies the 3D scene build (src-scene/build) into www/, which web.0 serves as /energyflow/.
+// Copies the 3D scene build (src-scene/build) into www/, which web.0 serves as /solarcockpit/.
 import { cpSync, rmSync } from "node:fs";
 
 rmSync("www", { recursive: true, force: true });

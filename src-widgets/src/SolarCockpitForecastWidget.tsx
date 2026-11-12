@@ -12,7 +12,7 @@ import { ALL_LAYERS } from "./lib/EnergyPlanChart";
 import { EnergyPlanDialog } from "./lib/EnergyPlanDialog";
 import { de, levelLabel, MODE_STYLE, modeLabel, parsePlan } from "./lib/plan";
 
-interface EnergyFlowRxData {
+interface SolarCockpitForecastRxData {
 	oidForecastToday: string;
 	oidForecastTomorrow: string;
 	oidForecastSeries: string;
@@ -106,18 +106,18 @@ function formatScrubLabel(date: Date): string {
 	const dayOffset = Math.round((target.getTime() - today.getTime()) / 86400000);
 	const dayLabel =
 		dayOffset === 0
-			? tr("energyflow_rt_today")
+			? tr("solarcockpit_rt_today")
 			: dayOffset === 1
-				? tr("energyflow_rt_tomorrow")
+				? tr("solarcockpit_rt_tomorrow")
 				: dayOffset === 2
-					? tr("energyflow_rt_day_after_tomorrow")
+					? tr("solarcockpit_rt_day_after_tomorrow")
 					: dayOffset === -1
-						? tr("energyflow_rt_yesterday")
+						? tr("solarcockpit_rt_yesterday")
 						: dayOffset === -2
-							? tr("energyflow_rt_day_before_yesterday")
+							? tr("solarcockpit_rt_day_before_yesterday")
 							: dayOffset > 0
-								? tr("energyflow_rt_in_days", { n: dayOffset })
-								: tr("energyflow_rt_days_ago", { n: -dayOffset });
+								? tr("solarcockpit_rt_in_days", { n: dayOffset })
+								: tr("solarcockpit_rt_days_ago", { n: -dayOffset });
 	return `${dayLabel} ${date.getHours().toString().padStart(2, "0")}:00`;
 }
 
@@ -136,7 +136,7 @@ const WINDOW_HOURS_FORWARD = 48;
  * forecast and what really happened can be compared at a glance. An optional `markerTs` (the
  * scrub position) draws a dashed drop-line + bead on the forecast curve at that point.
  * Deliberately just a sparkline - the full interactive timeline lives in the standalone 2.5D
- * scene (src-scene), reachable via the separate EnergyFlowDiagramWidget's clickable hub.
+ * scene (src-scene), reachable via the separate SolarCockpitYieldWidget's clickable hub.
  *
  * @param props
  * @param props.series
@@ -210,7 +210,7 @@ function ForecastSparkline(props: {
 						y1={y}
 						x2={markerX}
 						y2={y + height}
-						stroke="var(--energyflow-value, #102027)"
+						stroke="var(--solarcockpit-value, #102027)"
 						strokeWidth={1}
 						strokeDasharray="2 2"
 						opacity={0.6}
@@ -219,7 +219,7 @@ function ForecastSparkline(props: {
 						cx={markerX}
 						cy={markerY}
 						r={3}
-						fill="var(--energyflow-value, #102027)"
+						fill="var(--solarcockpit-value, #102027)"
 					/>
 				</g>
 			)}
@@ -247,7 +247,7 @@ function WeatherIcon(props: { condition: WeatherCondition; x: number; y: number 
 	const cloudOpacity = condition === "overcast" ? 0.85 : condition === "partly-cloudy" ? 0.5 : 0.65;
 	const cloud = (
 		<g
-			fill="var(--energyflow-label, #8892a0)"
+			fill="var(--solarcockpit-label, #8892a0)"
 			opacity={cloudOpacity}
 		>
 			<circle
@@ -339,14 +339,14 @@ function WeatherIcon(props: { condition: WeatherCondition; x: number; y: number 
 /**
  * Compact forecast-at-a-glance card: yield sparkline, current weather, recommendation text and
  * a timeline scrub slider. The live four-node flow diagram used to live in this same widget, but
- * was split out into its own EnergyFlowDiagramWidget so the two concerns can be placed on a
+ * was split out into its own SolarCockpitYieldWidget so the two concerns can be placed on a
  * dashboard independently - see that file for the diagram + the 2.5D scene's entry point.
  *
  * By minimal implementation of a vis-2 widget, only getWidgetInfo (static + instance) and
  * renderWidgetBody are required. See DemoWidget in ioBroker.vis-2-widgets-react-template for
  * the annotated reference this is based on.
  */
-export default class EnergyFlowWidget extends (window.visRxWidget as typeof VisRxWidget)<EnergyFlowRxData, VisRxWidgetState> {
+export default class SolarCockpitForecastWidget extends (window.visRxWidget as typeof VisRxWidget)<SolarCockpitForecastRxData, VisRxWidgetState> {
 	static adapter: string;
 
 	/**
@@ -379,120 +379,122 @@ export default class EnergyFlowWidget extends (window.visRxWidget as typeof VisR
 
 	private readonly openScene = (): void => {
 		if (!this.props.editMode) {
-			window.location.hash = "Energyflow3D";
+			window.location.hash = "SolarCockpit3D";
 		}
 	};
 
 	static getWidgetInfo(): RxWidgetInfo {
 		return {
-			id: "tplEnergyFlowCard",
-			visSet: "energyflow",
+			id: "tplSolarCockpitForecast",
+			visSet: "solarcockpit",
 			visSetLabel: "set_label",
 			visSetColor: "#ff9800",
-			visName: "EnergyFlowWidget",
-			visWidgetLabel: "widget_label",
+			visName: "SolarCockpitForecastWidget",
+			visWidgetLabel: "widget_label_forecast",
 			visAttrs: [
 				{
 					name: "forecast",
-					label: "energyflow_group_forecast",
+					label: "solarcockpit_group_forecast",
 					fields: [
 						{
 							name: "oidForecastToday",
 							type: "id",
-							label: "energyflow_oid_forecast_today",
-							default: "energyflow.0.summary.producer.forecastToday",
+							label: "solarcockpit_oid_forecast_today",
+							default: "solarcockpit.0.summary.producer.forecastToday",
 						},
 						{
 							name: "oidForecastTomorrow",
 							type: "id",
-							label: "energyflow_oid_forecast_tomorrow",
-							default: "energyflow.0.summary.producer.forecastTomorrow",
+							label: "solarcockpit_oid_forecast_tomorrow",
+							default: "solarcockpit.0.summary.producer.forecastTomorrow",
 						},
 						{
 							name: "oidForecastSeries",
 							type: "id",
-							label: "energyflow_oid_forecast_series",
-							default: "energyflow.0.summary.producer.forecastPower",
+							label: "solarcockpit_oid_forecast_series",
+							default: "solarcockpit.0.summary.producer.forecastPower",
 						},
 						{
 							name: "oidProducerActualSeries",
 							type: "id",
-							label: "energyflow_oid_producer_actual_series",
-							default: "energyflow.0.summary.producer.actualPower",
+							label: "solarcockpit_oid_producer_actual_series",
+							default: "solarcockpit.0.summary.producer.actualPower",
 						},
 						{
 							name: "oidColorForecast",
 							type: "id",
-							label: "energyflow_oid_color_forecast",
-							default: "energyflow.0.summary.settings.colorForecast",
+							label: "solarcockpit_oid_color_forecast",
+							default: "solarcockpit.0.summary.settings.colorForecast",
 						},
-						{ name: "oidColorActual", type: "id", label: "energyflow_oid_color_actual", default: "energyflow.0.summary.settings.colorActual" },
+						{ name: "oidColorActual", type: "id", label: "solarcockpit_oid_color_actual", default: "solarcockpit.0.summary.settings.colorActual" },
 					],
 				},
 				{
 					name: "recommendation",
-					label: "energyflow_group_recommendation",
-					fields: [{ name: "oidRecommendation", type: "id", label: "energyflow_oid_recommendation", default: "energyflow.0.recommendation.text" }],
+					label: "solarcockpit_group_recommendation",
+					fields: [
+						{ name: "oidRecommendation", type: "id", label: "solarcockpit_oid_recommendation", default: "solarcockpit.0.recommendation.text" },
+					],
 				},
 				{
 					name: "plan",
-					label: "energyflow_group_plan_optional",
+					label: "solarcockpit_group_plan_optional",
 					fields: [
-						{ name: "oidPlan", type: "id", label: "energyflow_oid_plan", default: "energyflow.0.plan.json" },
-						{ name: "oidPlanStatus", type: "id", label: "energyflow_oid_plan_status", default: "energyflow.0.plan.status" },
-						{ name: "oidFlexStart", type: "id", label: "energyflow_oid_flex_start", default: "energyflow.0.recommendation.flexWindowStart" },
-						{ name: "oidFlexEnd", type: "id", label: "energyflow_oid_flex_end", default: "energyflow.0.recommendation.flexWindowEnd" },
+						{ name: "oidPlan", type: "id", label: "solarcockpit_oid_plan", default: "solarcockpit.0.plan.json" },
+						{ name: "oidPlanStatus", type: "id", label: "solarcockpit_oid_plan_status", default: "solarcockpit.0.plan.status" },
+						{ name: "oidFlexStart", type: "id", label: "solarcockpit_oid_flex_start", default: "solarcockpit.0.recommendation.flexWindowStart" },
+						{ name: "oidFlexEnd", type: "id", label: "solarcockpit_oid_flex_end", default: "solarcockpit.0.recommendation.flexWindowEnd" },
 					],
 				},
 				{
 					name: "weather",
-					label: "energyflow_group_weather",
+					label: "solarcockpit_group_weather",
 					fields: [
 						{
 							name: "oidWeatherTemperature",
 							type: "id",
-							label: "energyflow_oid_weather_temperature",
-							default: "energyflow.0.summary.weather.temperature",
+							label: "solarcockpit_oid_weather_temperature",
+							default: "solarcockpit.0.summary.weather.temperature",
 						},
 						{
 							name: "oidWeatherCloudCover",
 							type: "id",
-							label: "energyflow_oid_weather_cloud_cover",
-							default: "energyflow.0.summary.weather.cloudCoverPct",
+							label: "solarcockpit_oid_weather_cloud_cover",
+							default: "solarcockpit.0.summary.weather.cloudCoverPct",
 						},
 						{
 							name: "oidWeatherPrecipitation",
 							type: "id",
-							label: "energyflow_oid_weather_precipitation",
-							default: "energyflow.0.summary.weather.precipitationMm",
+							label: "solarcockpit_oid_weather_precipitation",
+							default: "solarcockpit.0.summary.weather.precipitationMm",
 						},
 						{
 							name: "oidWeatherSnowfall",
 							type: "id",
-							label: "energyflow_oid_weather_snowfall",
-							default: "energyflow.0.summary.weather.snowfallCm",
+							label: "solarcockpit_oid_weather_snowfall",
+							default: "solarcockpit.0.summary.weather.snowfallCm",
 						},
-						{ name: "oidWeatherCode", type: "id", label: "energyflow_oid_weather_code", default: "energyflow.0.summary.weather.weatherCode" },
+						{ name: "oidWeatherCode", type: "id", label: "solarcockpit_oid_weather_code", default: "solarcockpit.0.summary.weather.weatherCode" },
 						{
 							name: "oidWeatherSeries",
 							type: "id",
-							label: "energyflow_oid_weather_series",
-							default: "energyflow.0.summary.weather.forecastSeries",
+							label: "solarcockpit_oid_weather_series",
+							default: "solarcockpit.0.summary.weather.forecastSeries",
 						},
 					],
 				},
 			],
-			visPrev: "widgets/energyflow/img/vis-energyflow.png",
+			visPrev: "widgets/solarcockpit/img/vis-solarcockpit-forecast.png",
 		};
 	}
 
 	/** vis-2 widget metadata (editor attributes and preview) */
 	getWidgetInfo(): RxWidgetInfo {
-		return EnergyFlowWidget.getWidgetInfo();
+		return SolarCockpitForecastWidget.getWidgetInfo();
 	}
 
 	static getI18nPrefix(): string {
-		return `${EnergyFlowWidget.adapter}_`;
+		return `${SolarCockpitForecastWidget.adapter}_`;
 	}
 
 	renderWidgetBody(props: RxRenderWidgetProps): React.JSX.Element {
@@ -632,7 +634,7 @@ export default class EnergyFlowWidget extends (window.visRxWidget as typeof VisR
 						style={{ width: "100%", maxWidth: 420, maxHeight: 112, cursor: this.props.editMode ? "default" : "pointer" }}
 						onClick={this.openScene}
 					>
-						<title>{tr("energyflow_rt_open_3d")}</title>
+						<title>{tr("solarcockpit_rt_open_3d")}</title>
 						<ForecastSparkline
 							series={visibleForecast}
 							actualSeries={actualSeries}
@@ -651,11 +653,11 @@ export default class EnergyFlowWidget extends (window.visRxWidget as typeof VisR
 							x={weatherLayer && weatherLayer.condition !== "clear" ? FORECAST_BOX.x + 14 : FORECAST_BOX.x}
 							y={FORECAST_BOX.y - 6}
 							fontSize={10}
-							fill="var(--energyflow-label, #37474f)"
+							fill="var(--solarcockpit-label, #37474f)"
 						>
 							{weatherLayer
 								? `${weatherLayer.label}${weatherTemperature !== undefined ? ` · ${weatherTemperature.toFixed(0)}°C` : ""}`
-								: tr("energyflow_rt_forecast")}
+								: tr("solarcockpit_rt_forecast")}
 						</text>
 						{scrubbedActual ? (
 							<text
@@ -663,9 +665,9 @@ export default class EnergyFlowWidget extends (window.visRxWidget as typeof VisR
 								y={FORECAST_BOX.y - 6}
 								textAnchor="end"
 								fontSize={10}
-								fill="var(--energyflow-value, #102027)"
+								fill="var(--solarcockpit-value, #102027)"
 							>
-								{tr("energyflow_rt_forecast_vs_actual", {
+								{tr("solarcockpit_rt_forecast_vs_actual", {
 									forecast: formatPower(scrubbedForecast?.powerW ?? 0),
 									actual: formatPower(scrubbedActual.powerW),
 								})}
@@ -677,10 +679,10 @@ export default class EnergyFlowWidget extends (window.visRxWidget as typeof VisR
 									y={FORECAST_BOX.y - 6}
 									textAnchor="end"
 									fontSize={10}
-									fill="var(--energyflow-value, #102027)"
+									fill="var(--solarcockpit-value, #102027)"
 								>
-									{tr("energyflow_rt_today_kwh", { kwh: num(forecastToday, 1) })}
-									{forecastTomorrow !== undefined ? ` · ${tr("energyflow_rt_tomorrow_kwh", { kwh: num(forecastTomorrow, 1) })}` : ""}
+									{tr("solarcockpit_rt_today_kwh", { kwh: num(forecastToday, 1) })}
+									{forecastTomorrow !== undefined ? ` · ${tr("solarcockpit_rt_tomorrow_kwh", { kwh: num(forecastTomorrow, 1) })}` : ""}
 								</text>
 							)
 						)}
@@ -697,8 +699,8 @@ export default class EnergyFlowWidget extends (window.visRxWidget as typeof VisR
 							onChange={this.handleScrubChange}
 							style={{ flex: 1 }}
 						/>
-						<span style={{ fontSize: 10, color: "var(--energyflow-label, #37474f)", minWidth: 82, textAlign: "right" }}>
-							{scrubLabel ?? tr("energyflow_rt_now")}
+						<span style={{ fontSize: 10, color: "var(--solarcockpit-label, #37474f)", minWidth: 82, textAlign: "right" }}>
+							{scrubLabel ?? tr("solarcockpit_rt_now")}
 						</span>
 					</div>
 				)}
@@ -706,7 +708,7 @@ export default class EnergyFlowWidget extends (window.visRxWidget as typeof VisR
 					<button
 						type="button"
 						onClick={this.openPlan}
-						title={tr("energyflow_rt_open_plan")}
+						title={tr("solarcockpit_rt_open_plan")}
 						style={{
 							width: "100%",
 							maxWidth: 420,
@@ -718,7 +720,7 @@ export default class EnergyFlowWidget extends (window.visRxWidget as typeof VisR
 							border: "1px solid rgba(128,128,128,0.35)",
 							borderRadius: 6,
 							background: "transparent",
-							color: "var(--energyflow-label, #37474f)",
+							color: "var(--solarcockpit-label, #37474f)",
 							cursor: this.props.editMode ? "default" : "pointer",
 						}}
 					>
@@ -740,7 +742,7 @@ export default class EnergyFlowWidget extends (window.visRxWidget as typeof VisR
 							fontSize: 11,
 							lineHeight: 1.4,
 							textAlign: "center",
-							color: "var(--energyflow-label, #37474f)",
+							color: "var(--solarcockpit-label, #37474f)",
 							boxSizing: "border-box",
 						}}
 					>

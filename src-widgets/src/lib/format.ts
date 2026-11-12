@@ -1,6 +1,6 @@
 /**
  * Formats a Watt value as a compact, signed power label (e.g. "4.3 kW", "-150 W"). Shared between
- * EnergyFlowDiagramWidget (node value labels) and EnergyFlowWidget (forecast-vs-actual text).
+ * SolarCockpitYieldWidget (node value labels) and SolarCockpitForecastWidget (forecast-vs-actual text).
  *
  * @param watts - power in Watt
  */

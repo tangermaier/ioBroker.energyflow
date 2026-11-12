@@ -31,3 +31,6 @@ npm-debug.log*
 
 # local scratch
 .reference/
+
+# release-script
+.commitinfo
