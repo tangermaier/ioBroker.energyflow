@@ -7,7 +7,7 @@
 		"maplibre-gl": "^4.7.1"
 	},
 	"devDependencies": {
-		"@iobroker/types": "^7.0.7",
+		"@iobroker/types": "^7.2.5",
 		"typescript": "^5.9.3",
 		"vite": "^7.3.2"
 	},
