@@ -58,7 +58,7 @@ AC-Ausgangsregister – den echten Wechselrichter-Verlust messen lassen (DC-Eing
 
 ## 2. Voraussetzungen
 
-- ioBroker mit js-controller ab 5, Node.js ab 20, Admin ab 6.
+- ioBroker mit js-controller ab 6.0.11, Node.js ab 22, Admin ab 7.6.20.
 - **Standort gesetzt** unter *Admin → Systemeinstellungen* (Breiten-/Längengrad). Prognose,
   Sonnenstand und Szene brauchen ihn.
 - **Leistungs-States** für alles, was du sehen willst (W oder kW).
@@ -72,17 +72,25 @@ AC-Ausgangsregister – den echten Wechselrichter-Verlust messen lassen (DC-Eing
 
 ## 3. Installation
 
-Version 0.1.0 ist noch nicht im ioBroker-Repository. Installiere das Release-Paket von GitHub:
+Solange SolarCockpit noch nicht im ioBroker-Repository verfügbar ist, installierst du das auf npm
+veröffentlichte Paket:
 
-1. Öffne die [Releases-Seite](https://github.com/tangermaier/ioBroker.solarcockpit/releases) und
-   kopiere den Link der angehängten Datei `iobroker.solarcockpit-<version>.tgz`.
-2. Auf dem ioBroker-Host `iobroker url <kopierter Link>` ausführen – oder in Admin → *Adapter* über
-   das GitHub-/Katzen-Symbol *„Installieren aus eigener URL“* den Link einfügen.
+1. Die aktuelle Version auf [npm](https://www.npmjs.com/package/iobroker.solarcockpit) nachsehen
+   (z. B. `0.1.1`).
+2. Auf dem ioBroker-Host ausführen (`<version>` ersetzen):
+   ```
+   iobroker url https://registry.npmjs.org/iobroker.solarcockpit/-/iobroker.solarcockpit-<version>.tgz
+   ```
+   Alternativ in Admin → *Adapter* über das GitHub-/Katzen-Symbol *„Installieren aus eigener URL“*
+   denselben Link einfügen.
 3. Instanz anlegen (Admin → Adapter → SolarCockpit → „+“).
 4. Mit vis-2: die vis-2-Instanz danach neu starten, damit die Widgets erscheinen.
 
-> Eine Installation direkt von der Repository-URL wird nicht unterstützt: Das Repository enthält
-> nur Quellcode, das Release-Paket die fertig gebauten Widgets und die Szene.
+Sobald der Adapter im ioBroker-Repository ist, installierst du ihn einfach über die Adapterliste im
+Admin.
+
+> Eine Installation direkt von der GitHub-Repository-URL wird nicht unterstützt: Das Repository
+> enthält nur Quellcode, das npm-Paket die fertig gebauten Widgets und die Szene.
 
 ---
 

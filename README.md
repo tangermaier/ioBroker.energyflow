@@ -42,14 +42,14 @@ Inspired by Home Assistant's Energy Dashboard and by
 
 ## Requirements
 
-- ioBroker with js-controller ≥ 5, Node.js ≥ 20, admin ≥ 6
+- ioBroker with js-controller ≥ 6.0.11, Node.js ≥ 22, admin ≥ 7.6.20
 - Existing states for the power values you want to track (W or kW)
 - Optional, recommended: a history adapter that logs those power states
 - Optional: vis-2 for the widgets, `tibberlink` for dynamic prices
 
 ## Quick start
 
-1. Install the adapter (see the guide for installing a release from GitHub).
+1. Install the adapter (until it is in the ioBroker repository: from npm, see the guide).
 2. Admin → instance settings: select your **history instance**, enter your **entities**
    (one row per meter: ID, name, category, power state).
 3. Make sure the location is set in *System settings* (needed for the forecast and the scene).

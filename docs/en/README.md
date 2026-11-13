@@ -58,7 +58,7 @@ creates separate *loss* entities from them), or - for a hybrid inverter with an 
 
 ## 2. Prerequisites
 
-- ioBroker with js-controller 5 or newer, Node.js 20 or newer, admin 6 or newer.
+- ioBroker with js-controller 6.0.11 or newer, Node.js 22 or newer, admin 7.6.20 or newer.
 - **Location set** in *Admin → System settings* (latitude/longitude). The PV forecast, the sun
   position and the scene need it.
 - **Power states** for everything you want to see (W or kW).
@@ -72,17 +72,24 @@ creates separate *loss* entities from them), or - for a hybrid inverter with an 
 
 ## 3. Installation
 
-Version 0.1.0 is not yet in the ioBroker repository. Install the release package from GitHub:
+As long as SolarCockpit is not yet available in the ioBroker repository, install the package
+published on npm:
 
-1. Open the [releases page](https://github.com/tangermaier/ioBroker.solarcockpit/releases) and copy
-   the link of the attached `iobroker.solarcockpit-<version>.tgz`.
-2. On the ioBroker host run `iobroker url <copied link>` - or in Admin → *Adapters* use the
-   GitHub/cat icon *"Install from custom URL"* and paste the link.
+1. Look up the current version on [npm](https://www.npmjs.com/package/iobroker.solarcockpit)
+   (e.g. `0.1.1`).
+2. On the ioBroker host run (replace `<version>`):
+   ```
+   iobroker url https://registry.npmjs.org/iobroker.solarcockpit/-/iobroker.solarcockpit-<version>.tgz
+   ```
+   Alternatively, in Admin → *Adapters* use the GitHub/cat icon *"Install from custom URL"* and paste
+   the same link.
 3. Add an instance of *SolarCockpit* (Admin → Adapters → SolarCockpit → "+").
 4. If you use vis-2: restart the vis-2 instance afterwards so the widgets appear.
 
-> Installing directly from the repository URL is not supported: the repository contains only
-> source code, the release package contains the built widgets and scene.
+Once the adapter is in the ioBroker repository, simply install it from the adapter list in Admin.
+
+> Installing directly from the GitHub repository URL is not supported: the repository contains only
+> source code, the npm package contains the built widgets and scene.
 
 ---
 
