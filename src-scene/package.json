@@ -4,7 +4,7 @@
 	"version": "0.1.0",
 	"type": "module",
 	"dependencies": {
-		"maplibre-gl": "^4.7.1"
+		"maplibre-gl": "^6.17.0"
 	},
 	"devDependencies": {
 		"@iobroker/types": "^7.0.7",
