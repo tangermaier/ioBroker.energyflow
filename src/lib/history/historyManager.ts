@@ -158,7 +158,7 @@ export function sumCategoryTotals(
  */
 export class HistoryManager {
 	private readonly adapter: utils.AdapterInstance;
-	private refreshTimer: ReturnType<typeof setInterval> | undefined;
+	private refreshTimer: ioBroker.Interval | undefined;
 	private lossDefinitions: LossDefinition[] = [];
 
 	/**
@@ -183,7 +183,7 @@ export class HistoryManager {
 		await this.createHistoryObjects(entities, childrenByParent);
 
 		await this.refresh(entities, childrenByParent);
-		this.refreshTimer = setInterval(() => {
+		this.refreshTimer = this.adapter.setInterval(() => {
 			void this.refresh(entities, childrenByParent);
 		}, REFRESH_INTERVAL_MS);
 	}
@@ -191,7 +191,7 @@ export class HistoryManager {
 	/** Stops the periodic refresh timer. */
 	public stop(): void {
 		if (this.refreshTimer) {
-			clearInterval(this.refreshTimer);
+			this.adapter.clearInterval(this.refreshTimer);
 			this.refreshTimer = undefined;
 		}
 	}

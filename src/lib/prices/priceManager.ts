@@ -58,7 +58,7 @@ export class PriceManager {
 	private feedInTariffCt: number | undefined;
 	private fixedPurchaseCt: number | undefined;
 	private source: PriceSource = "none";
-	private slotTimer: ReturnType<typeof setTimeout> | undefined;
+	private slotTimer: ioBroker.Timeout | undefined;
 	private warnedMissing = false;
 	private readonly listeners: Array<() => void> = [];
 
@@ -113,7 +113,7 @@ export class PriceManager {
 	/** Stops the slot-boundary timer. Call this from the adapter's unload handler. */
 	public stop(): void {
 		if (this.slotTimer) {
-			clearTimeout(this.slotTimer);
+			this.adapter.clearTimeout(this.slotTimer);
 			this.slotTimer = undefined;
 		}
 	}
@@ -333,7 +333,7 @@ export class PriceManager {
 	private scheduleSlotTick(): void {
 		const now = Date.now();
 		const next = Math.floor(now / FIXED_SLOT_MS) * FIXED_SLOT_MS + FIXED_SLOT_MS + 2000;
-		this.slotTimer = setTimeout(() => {
+		this.slotTimer = this.adapter.setTimeout(() => {
 			void (async () => {
 				if (this.useTibber) {
 					this.cachedSlots = mergePriceSlots([this.cachedSlots], Date.now());

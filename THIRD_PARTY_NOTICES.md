@@ -27,7 +27,7 @@ Data services used at runtime (not bundled) and other credits are listed in the 
 | @tensorflow/tfjs-data | 4.22.0 | Apache-2.0 |
 | @tensorflow/tfjs-layers | 4.22.0 | Apache-2.0 AND MIT |
 | @types/long | 4.0.2 | MIT |
-| @types/node | 20.19.43 | MIT |
+| @types/node | 22.20.5 | MIT |
 | @types/node-fetch | 2.6.13 | MIT |
 | @types/offscreencanvas | 2019.3.0 | MIT |
 | @types/offscreencanvas | 2019.7.3 | MIT |
@@ -633,7 +633,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-### @types/long@4.0.2, @types/node@20.19.43, @types/node-fetch@2.6.13, @types/seedrandom@2.4.34, @types/triple-beam@1.3.5, @types/geojson@7946.0.16, @types/geojson-vt@3.2.5, @types/mapbox__point-geometry@0.1.4, @types/mapbox__vector-tile@1.3.4, @types/pbf@3.0.5, @types/supercluster@7.1.3
+### @types/long@4.0.2, @types/node@22.20.5, @types/node-fetch@2.6.13, @types/seedrandom@2.4.34, @types/triple-beam@1.3.5, @types/geojson@7946.0.16, @types/geojson-vt@3.2.5, @types/mapbox__point-geometry@0.1.4, @types/mapbox__vector-tile@1.3.4, @types/pbf@3.0.5, @types/supercluster@7.1.3
 
 ```text
 MIT License

@@ -44,10 +44,10 @@ export class RecommendationManager {
 	private readonly prices: PriceManager;
 	private readonly entities: EntityDefinition[];
 	private profile: LoadProfile = { workday: new Array(24).fill(undefined), weekend: new Array(24).fill(undefined) };
-	private slotTimer: ReturnType<typeof setTimeout> | undefined;
-	private profileTimer: ReturnType<typeof setInterval> | undefined;
-	private costTimer: ReturnType<typeof setInterval> | undefined;
-	private replanTimer: ReturnType<typeof setTimeout> | undefined;
+	private slotTimer: ioBroker.Timeout | undefined;
+	private profileTimer: ioBroker.Interval | undefined;
+	private costTimer: ioBroker.Interval | undefined;
+	private replanTimer: ioBroker.Timeout | undefined;
 	private refreshing = false;
 	private refreshAgain = false;
 	private cost = { dayKey: "", todayCt: 0, yesterdayCt: 0, lastSampleTs: 0 };
@@ -70,20 +70,20 @@ export class RecommendationManager {
 		await this.refreshProfile();
 		await this.refresh();
 		this.scheduleSlotTick();
-		this.profileTimer = setInterval(() => void this.refreshProfile(), PROFILE_REFRESH_MS);
-		this.costTimer = setInterval(() => void this.sampleCost(), COST_SAMPLE_MS);
+		this.profileTimer = this.adapter.setInterval(() => void this.refreshProfile(), PROFILE_REFRESH_MS);
+		this.costTimer = this.adapter.setInterval(() => void this.sampleCost(), COST_SAMPLE_MS);
 	}
 
 	/** Stops all timers. Call this from the adapter's unload handler. */
 	public stop(): void {
 		for (const t of [this.slotTimer, this.replanTimer]) {
 			if (t) {
-				clearTimeout(t);
+				this.adapter.clearTimeout(t);
 			}
 		}
 		for (const t of [this.profileTimer, this.costTimer]) {
 			if (t) {
-				clearInterval(t);
+				this.adapter.clearInterval(t);
 			}
 		}
 		this.slotTimer = this.replanTimer = this.profileTimer = this.costTimer = undefined;
@@ -92,9 +92,9 @@ export class RecommendationManager {
 	/** Requests a (debounced) replan - call on new prices or a new PV forecast. */
 	public requestReplan(): void {
 		if (this.replanTimer) {
-			clearTimeout(this.replanTimer);
+			this.adapter.clearTimeout(this.replanTimer);
 		}
-		this.replanTimer = setTimeout(() => {
+		this.replanTimer = this.adapter.setTimeout(() => {
 			this.replanTimer = undefined;
 			void this.refresh();
 		}, REPLAN_DEBOUNCE_MS);
@@ -104,7 +104,7 @@ export class RecommendationManager {
 		const now = Date.now();
 		// a few seconds after the boundary, so PriceManager has already switched to the new slot
 		const next = Math.floor(now / SLOT_MS) * SLOT_MS + SLOT_MS + 5000;
-		this.slotTimer = setTimeout(() => {
+		this.slotTimer = this.adapter.setTimeout(() => {
 			void this.refresh().finally(() => this.scheduleSlotTick());
 		}, next - now);
 	}

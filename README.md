@@ -89,6 +89,12 @@ using a fixed glossary - corrections by native speakers are very welcome (pull r
 	### **WORK IN PROGRESS**
 -->
 
+### 0.1.1 (2026-11-13)
+
+- (tangermaier) Timers are now managed by the adapter (cleaned up automatically on unload).
+- (tangermaier) CI based on the ioBroker template (Node.js 22/24/26, integration tests, npm trusted publishing).
+- (tangermaier) Node.js 22 baseline; admin 7.6.20 or newer required.
+
 ### 0.1.0 (2026-11-08)
 
 - (tangermaier) Initial public release: energy flow widgets for vis-2 and a 2.5D scene, PV yield

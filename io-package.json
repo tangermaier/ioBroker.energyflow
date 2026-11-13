@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "solarcockpit",
-		"version": "0.1.0",
+		"version": "0.1.1",
 		"news": {
+			"0.1.1": {
+				"en": "Maintenance: adapter-managed timers, CI based on the ioBroker template with npm trusted publishing, Node.js 22 baseline, admin 7.6.20 or newer required",
+				"de": "Wartung: vom Adapter verwaltete Timer, CI nach ioBroker-Vorlage mit npm Trusted Publishing, Node.js 22 als Basis, admin 7.6.20 oder neuer erforderlich",
+				"ru": "Обслуживание: таймеры под управлением адаптера, CI по шаблону ioBroker с trusted publishing в npm, базовая версия Node.js 22, требуется admin 7.6.20 или новее",
+				"pt": "Manutenção: temporizadores geridos pelo adaptador, CI baseado no modelo ioBroker com trusted publishing no npm, Node.js 22 como base, requer admin 7.6.20 ou mais recente",
+				"nl": "Onderhoud: timers beheerd door de adapter, CI op basis van het ioBroker-sjabloon met npm trusted publishing, Node.js 22 als basis, admin 7.6.20 of nieuwer vereist",
+				"fr": "Maintenance : minuteries gérées par l'adaptateur, CI basée sur le modèle ioBroker avec trusted publishing npm, Node.js 22 comme base, admin 7.6.20 ou plus récent requis",
+				"it": "Manutenzione: timer gestiti dall'adattatore, CI basata sul modello ioBroker con trusted publishing npm, Node.js 22 come base, richiesto admin 7.6.20 o successivo",
+				"es": "Mantenimiento: temporizadores gestionados por el adaptador, CI basada en la plantilla de ioBroker con trusted publishing de npm, Node.js 22 como base, se requiere admin 7.6.20 o posterior",
+				"pl": "Konserwacja: timery zarządzane przez adapter, CI według szablonu ioBroker z trusted publishing w npm, Node.js 22 jako podstawa, wymagany admin 7.6.20 lub nowszy",
+				"uk": "Обслуговування: таймери під керуванням адаптера, CI за шаблоном ioBroker із trusted publishing у npm, базова версія Node.js 22, потрібен admin 7.6.20 або новіший",
+				"zh-cn": "维护：由适配器管理的定时器，基于 ioBroker 模板并使用 npm trusted publishing 的 CI，以 Node.js 22 为基础，需要 admin 7.6.20 或更高版本"
+			},
 			"0.1.0": {
 				"en": "Initial public release: energy flow widgets for vis-2 and a 2.5D scene, PV yield forecast with ML correction, advisory energy plan with dynamic prices, history via any history adapter",
 				"de": "Erste öffentliche Version: Energiefluss-Widgets für vis-2 und eine 2,5D-Szene, PV-Ertragsprognose mit ML-Korrektur, beratender Energieplan mit dynamischen Preisen, Verlaufsdaten über jeden History-Adapter",
@@ -60,7 +73,7 @@
 		"messagebox": true,
 		"type": "energy",
 		"compact": true,
-		"connectionType": "local",
+		"connectionType": "cloud",
 		"dataSource": "push",
 		"adminUI": {
 			"config": "json"
@@ -72,7 +85,7 @@
 		],
 		"globalDependencies": [
 			{
-				"admin": ">=7.6.17"
+				"admin": ">=7.6.20"
 			}
 		],
 		"visWidgets": {

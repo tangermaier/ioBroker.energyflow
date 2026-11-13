@@ -20,7 +20,7 @@ const REFRESH_INTERVAL_MS = 24 * 60 * 60 * 1000;
  */
 export class BuildingManager {
 	private readonly adapter: utils.AdapterInstance;
-	private refreshTimer: ReturnType<typeof setInterval> | undefined;
+	private refreshTimer: ioBroker.Interval | undefined;
 
 	/**
 	 * @param adapter - the adapter instance to create/update objects and states on
@@ -33,7 +33,7 @@ export class BuildingManager {
 	public async init(): Promise<void> {
 		await this.createObjects();
 		await this.refresh();
-		this.refreshTimer = setInterval(() => {
+		this.refreshTimer = this.adapter.setInterval(() => {
 			void this.refresh();
 		}, REFRESH_INTERVAL_MS);
 	}
@@ -41,7 +41,7 @@ export class BuildingManager {
 	/** Stops the periodic refresh timer. */
 	public stop(): void {
 		if (this.refreshTimer) {
-			clearInterval(this.refreshTimer);
+			this.adapter.clearInterval(this.refreshTimer);
 			this.refreshTimer = undefined;
 		}
 	}

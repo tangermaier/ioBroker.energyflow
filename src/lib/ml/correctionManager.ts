@@ -24,7 +24,7 @@ const RETRAIN_INTERVAL_MS = 24 * 60 * 60 * 1000;
 export class CorrectionManager {
 	private readonly adapter: utils.AdapterInstance;
 	private readonly models = new Map<string, tf.LayersModel>();
-	private retrainTimer: ReturnType<typeof setInterval> | undefined;
+	private retrainTimer: ioBroker.Interval | undefined;
 
 	/**
 	 * @param adapter - the adapter instance to create/update objects and states on
@@ -63,7 +63,7 @@ export class CorrectionManager {
 		}
 
 		void this.trainAll(entities, historySource, location);
-		this.retrainTimer = setInterval(() => {
+		this.retrainTimer = this.adapter.setInterval(() => {
 			void this.trainAll(entities, historySource, location);
 		}, RETRAIN_INTERVAL_MS);
 	}
@@ -71,7 +71,7 @@ export class CorrectionManager {
 	/** Stops the periodic retraining timer. Call this from the adapter's unload handler. */
 	public stop(): void {
 		if (this.retrainTimer) {
-			clearInterval(this.retrainTimer);
+			this.adapter.clearInterval(this.retrainTimer);
 			this.retrainTimer = undefined;
 		}
 		for (const model of this.models.values()) {

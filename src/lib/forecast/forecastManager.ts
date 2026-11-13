@@ -46,7 +46,7 @@ function getPastDays(adapter: utils.AdapterInstance): number {
 export class ForecastManager {
 	private readonly adapter: utils.AdapterInstance;
 	private readonly correctionManager: CorrectionManager;
-	private refreshTimer: ReturnType<typeof setInterval> | undefined;
+	private refreshTimer: ioBroker.Interval | undefined;
 
 	/**
 	 * @param adapter - the adapter instance to create/update objects and states on
@@ -76,7 +76,7 @@ export class ForecastManager {
 		}
 
 		await this.refresh(forecastable);
-		this.refreshTimer = setInterval(() => {
+		this.refreshTimer = this.adapter.setInterval(() => {
 			void this.refresh(forecastable);
 		}, REFRESH_INTERVAL_MS);
 	}
@@ -84,7 +84,7 @@ export class ForecastManager {
 	/** Stops the periodic refresh timer and the ML correction manager's retrain timer. */
 	public stop(): void {
 		if (this.refreshTimer) {
-			clearInterval(this.refreshTimer);
+			this.adapter.clearInterval(this.refreshTimer);
 			this.refreshTimer = undefined;
 		}
 		this.correctionManager.stop();

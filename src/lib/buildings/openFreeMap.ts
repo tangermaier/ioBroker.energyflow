@@ -32,14 +32,8 @@ export interface OfmRing {
  *
  * @param url - the URL to fetch
  */
-async function fetchWithTimeout(url: string): Promise<Response> {
-	const controller = new AbortController();
-	const timer = setTimeout(() => controller.abort(), OFM_FETCH_TIMEOUT_MS);
-	try {
-		return await fetch(url, { signal: controller.signal });
-	} finally {
-		clearTimeout(timer);
-	}
+function fetchWithTimeout(url: string): Promise<Response> {
+	return fetch(url, { signal: AbortSignal.timeout(OFM_FETCH_TIMEOUT_MS) });
 }
 
 /** Resolves the current versioned tile URL template from the TileJSON (the planet snapshot rotates periodically). */

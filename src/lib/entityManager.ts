@@ -74,7 +74,7 @@ export class EntityManager {
 	private readonly acStateSubscribers = new Map<string, string[]>();
 	private readonly energyStateSubscribers = new Map<string, string[]>();
 	private readonly socStateSubscribers = new Map<string, string[]>();
-	private staleTimer: ReturnType<typeof setInterval> | undefined;
+	private staleTimer: ioBroker.Interval | undefined;
 
 	/**
 	 * @param adapter - the adapter instance to create/update objects and states on
@@ -151,7 +151,7 @@ export class EntityManager {
 		await this.recomputeAll();
 
 		if (this.entities.some(e => e.powerSource === "measuredWithFallback")) {
-			this.staleTimer = setInterval(() => {
+			this.staleTimer = this.adapter.setInterval(() => {
 				void this.onStaleCheck();
 			}, STALE_CHECK_INTERVAL_MS);
 		}
@@ -160,7 +160,7 @@ export class EntityManager {
 	/** Stops the staleness check timer. Call this from the adapter's unload handler. */
 	public stop(): void {
 		if (this.staleTimer) {
-			clearInterval(this.staleTimer);
+			this.adapter.clearInterval(this.staleTimer);
 			this.staleTimer = undefined;
 		}
 	}

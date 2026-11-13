@@ -1,62 +1,83 @@
 name: Test and Release
 
-# Lint, type checks, unit/package tests and full builds on every push and pull request.
-# Deliberately without an npm deploy job for now (releases are published manually).
-
+# Run this job on all pushes and pull requests
+# as well as tags with a semantic version
 on:
     push:
         branches:
-            - "main"
+            - "*"
         tags:
-            - "v[0-9]+.[0-9]+.[0-9]+**"
+            # normal versions
+            - "v[0-9]+.[0-9]+.[0-9]+"
+            # pre-releases
+            - "v[0-9]+.[0-9]+.[0-9]+-**"
     pull_request: {}
 
+# Cancel previous PR/branch runs when a new commit is pushed
 concurrency:
     group: ${{ github.ref }}
     cancel-in-progress: true
 
 jobs:
+    # Performs quick checks before the expensive test runs
     check-and-lint:
         if: contains(github.event.head_commit.message, '[skip ci]') == false
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: 20.x
-                  cache: npm
-            - run: npm ci
-            # The widget and scene sub-projects must be installed BEFORE linting: the root eslint
-            # config type-checks their sources, and without their node_modules React/maplibre
-            # types resolve to "any" and trigger type-aware lint errors.
-            - name: Install widget and scene dependencies
-              run: |
-                  npm ci --prefix src-widgets
-                  npm ci --prefix src-scene
-            - name: Type check (adapter)
-              run: npm run check
-            - name: Lint
-              run: npm run lint
-            - name: Build adapter, widgets and scene
-              run: npm run build:all
-            - name: License check
-              run: node tools/generate-notices.mjs --check
 
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: ioBroker/testing-action-check@v2
+              with:
+                  node-version: "24.x"
+                  # The widget and scene sub-projects must be installed too: the root eslint config
+                  # type-checks their sources, and without their node_modules React/maplibre types
+                  # resolve to "any" and trigger type-aware lint errors.
+                  install-command: npm ci && npm ci --prefix src-widgets && npm ci --prefix src-scene
+                  type-checking: true
+                  lint: true
+                  test-command: npm run test:package && node tools/generate-notices.mjs --check
+
+    # Runs adapter tests on all supported node versions and OSes
     adapter-tests:
         if: contains(github.event.head_commit.message, '[skip ci]') == false
         needs: [check-and-lint]
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                node-version: [20.x, 22.x]
+                node-version: [22.x, 24.x, 26.x]
                 os: [ubuntu-latest, windows-latest, macos-latest]
+
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: ioBroker/testing-action-adapter@v1
               with:
                   node-version: ${{ matrix.node-version }}
-                  cache: npm
-            - run: npm ci
-            - run: npm run build
-            - name: Unit and package tests
-              run: npm test
+                  os: ${{ matrix.os }}
+                  build: true
+
+    # Deploys the final package to npm (trusted publishing, no token) and creates the GitHub release
+    deploy:
+        needs: [check-and-lint, adapter-tests]
+
+        # Trigger this step only when a commit on any branch is tagged with a version number
+        if: |
+            contains(github.event.head_commit.message, '[skip ci]') == false &&
+            github.event_name == 'push' &&
+            startsWith(github.ref, 'refs/tags/v')
+
+        runs-on: ubuntu-latest
+
+        permissions:
+            # Write permissions are required to create GitHub releases
+            contents: write
+            # Required for npm trusted publishing (OIDC)
+            id-token: write
+
+        steps:
+            - uses: ioBroker/testing-action-deploy@v1
+              with:
+                  node-version: "24.x"
+                  # widgets/ and www/ are built from the sub-projects and must be part of the package
+                  install-command: npm ci && npm ci --prefix src-widgets && npm ci --prefix src-scene
+                  build: true
+                  build-command: npm run build:all
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
