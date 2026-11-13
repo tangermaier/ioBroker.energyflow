@@ -9,6 +9,9 @@ updates:
           interval: monthly
           time: "04:00"
           timezone: Europe/Berlin
+      # only propose versions that have been public for a while (supply-chain safety)
+      cooldown:
+          default-days: 7
       open-pull-requests-limit: 10
       versioning-strategy: increase
       groups:
@@ -28,6 +31,9 @@ updates:
           interval: monthly
           time: "04:00"
           timezone: Europe/Berlin
+      # only propose versions that have been public for a while (supply-chain safety)
+      cooldown:
+          default-days: 7
       open-pull-requests-limit: 10
       versioning-strategy: increase
       groups:
@@ -49,4 +55,7 @@ updates:
           interval: monthly
           time: "04:00"
           timezone: Europe/Berlin
-      open-pull-requests-limit: 5
+      # only propose versions that have been public for a while (supply-chain safety)
+      cooldown:
+          default-days: 7
+      open-pull-requests-limit: 15
