@@ -35,7 +35,9 @@ jobs:
                   install-command: npm ci && npm ci --prefix src-widgets && npm ci --prefix src-scene
                   type-checking: true
                   lint: true
-                  test-command: npm run test:package && node tools/generate-notices.mjs --check
+            # Runs in the workspace prepared above (all three sub-projects installed)
+            - name: License check
+              run: node tools/generate-notices.mjs --check
 
     # Runs adapter tests on all supported node versions and OSes
     adapter-tests:

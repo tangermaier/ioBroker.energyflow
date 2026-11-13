@@ -1,0 +1,52 @@
+version: 2
+updates:
+    # Adapter backend (root), vis-2 widgets and the 2.5D scene each have their own lockfile
+    - package-ecosystem: npm
+      directories:
+          - "/"
+          - "/src-scene"
+      schedule:
+          interval: monthly
+          time: "04:00"
+          timezone: Europe/Berlin
+      open-pull-requests-limit: 10
+      versioning-strategy: increase
+      groups:
+          # minor/patch updates per directory in one PR, majors stay separate
+          minor-and-patch:
+              update-types: [minor, patch]
+      ignore:
+          # pinned on purpose: newer versions require TypeScript >= 5.7
+          - dependency-name: "@tsconfig/node22"
+          # Node.js 22 is the minimum supported version
+          - dependency-name: "@types/node"
+            update-types: ["version-update:semver-major"]
+
+    - package-ecosystem: npm
+      directory: "/src-widgets"
+      schedule:
+          interval: monthly
+          time: "04:00"
+          timezone: Europe/Berlin
+      open-pull-requests-limit: 10
+      versioning-strategy: increase
+      groups:
+          minor-and-patch:
+              update-types: [minor, patch]
+      ignore:
+          # Shared with the vis-2 host via Module Federation (the host version wins at runtime).
+          # These are aligned manually with the shared versions in vis-2's mf-manifest.json.
+          - dependency-name: "react"
+          - dependency-name: "react-dom"
+          - dependency-name: "@types/react"
+          - dependency-name: "@types/react-dom"
+          - dependency-name: "@mui/*"
+          - dependency-name: "@emotion/*"
+
+    - package-ecosystem: github-actions
+      directory: "/"
+      schedule:
+          interval: monthly
+          time: "04:00"
+          timezone: Europe/Berlin
+      open-pull-requests-limit: 5

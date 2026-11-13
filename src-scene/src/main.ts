@@ -236,7 +236,7 @@ class Scene {
 		// The scrub slider itself needs its bounds derived from the forecast series, so a first
 		// render happens once that arrives (see the forecastPower subscription above); this tick
 		// just covers the case where nothing has been received yet.
-		setInterval(() => this.render(), 60000);
+		window.setInterval(() => this.render(), 60000);
 
 		const slider = document.getElementById("scrub") as HTMLInputElement;
 		slider.addEventListener("input", () => {

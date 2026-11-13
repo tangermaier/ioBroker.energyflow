@@ -89,6 +89,10 @@ using a fixed glossary - corrections by native speakers are very welcome (pull r
 	### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+
+- (tangermaier) 3D scene: periodic refresh uses the browser timer explicitly (repository checker E5004).
+
 ### 0.1.1 (2026-11-13)
 
 - (tangermaier) Timers are now managed by the adapter (cleaned up automatically on unload).
