@@ -73,23 +73,21 @@ creates separate *loss* entities from them), or - for a hybrid inverter with an 
 ## 3. Installation
 
 As long as SolarCockpit is not yet available in the ioBroker repository, install the package
-published on npm:
+published on npm by its name:
 
-1. Look up the current version on [npm](https://www.npmjs.com/package/iobroker.solarcockpit)
-   (e.g. `0.1.1`).
-2. On the ioBroker host run (replace `<version>`):
+1. On the ioBroker host run:
    ```
-   iobroker url https://registry.npmjs.org/iobroker.solarcockpit/-/iobroker.solarcockpit-<version>.tgz
+   iob url iobroker.solarcockpit
    ```
-   Alternatively, in Admin → *Adapters* use the GitHub/cat icon *"Install from custom URL"* and paste
-   the same link.
-3. Add an instance of *SolarCockpit* (Admin → Adapters → SolarCockpit → "+").
-4. If you use vis-2: restart the vis-2 instance afterwards so the widgets appear.
+   This installs the current version from npm. To update, run the same command again.
+2. Add an instance of *SolarCockpit* (Admin → Adapters → SolarCockpit → "+").
+3. If you use vis-2: restart the vis-2 instance afterwards so the widgets appear.
 
 Once the adapter is in the ioBroker repository, simply install it from the adapter list in Admin.
 
-> Installing directly from the GitHub repository URL is not supported: the repository contains only
-> source code, the npm package contains the built widgets and scene.
+> Please do **not** install from the GitHub URL or from downloaded `.tgz` files: the repository contains
+> only source code (without the built widgets and scene), and installing by package name is the only
+> way to be sure you get the published npm package.
 
 ---
 

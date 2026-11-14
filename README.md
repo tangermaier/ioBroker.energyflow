@@ -49,7 +49,8 @@ Inspired by Home Assistant's Energy Dashboard and by
 
 ## Quick start
 
-1. Install the adapter (until it is in the ioBroker repository: from npm, see the guide).
+1. Install the adapter. Until it is in the ioBroker repository, install it from npm by name:
+   `iob url iobroker.solarcockpit` (please not from GitHub or a `.tgz` file).
 2. Admin → instance settings: select your **history instance**, enter your **entities**
    (one row per meter: ID, name, category, power state).
 3. Make sure the location is set in *System settings* (needed for the forecast and the scene).

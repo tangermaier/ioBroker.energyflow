@@ -73,24 +73,22 @@ AC-Ausgangsregister – den echten Wechselrichter-Verlust messen lassen (DC-Eing
 ## 3. Installation
 
 Solange SolarCockpit noch nicht im ioBroker-Repository verfügbar ist, installierst du das auf npm
-veröffentlichte Paket:
+veröffentlichte Paket über seinen Namen:
 
-1. Die aktuelle Version auf [npm](https://www.npmjs.com/package/iobroker.solarcockpit) nachsehen
-   (z. B. `0.1.1`).
-2. Auf dem ioBroker-Host ausführen (`<version>` ersetzen):
+1. Auf dem ioBroker-Host ausführen:
    ```
-   iobroker url https://registry.npmjs.org/iobroker.solarcockpit/-/iobroker.solarcockpit-<version>.tgz
+   iob url iobroker.solarcockpit
    ```
-   Alternativ in Admin → *Adapter* über das GitHub-/Katzen-Symbol *„Installieren aus eigener URL“*
-   denselben Link einfügen.
-3. Instanz anlegen (Admin → Adapter → SolarCockpit → „+“).
-4. Mit vis-2: die vis-2-Instanz danach neu starten, damit die Widgets erscheinen.
+   Das installiert die aktuelle Version von npm. Für ein Update denselben Befehl erneut ausführen.
+2. Instanz anlegen (Admin → Adapter → SolarCockpit → „+“).
+3. Mit vis-2: die vis-2-Instanz danach neu starten, damit die Widgets erscheinen.
 
 Sobald der Adapter im ioBroker-Repository ist, installierst du ihn einfach über die Adapterliste im
 Admin.
 
-> Eine Installation direkt von der GitHub-Repository-URL wird nicht unterstützt: Das Repository
-> enthält nur Quellcode, das npm-Paket die fertig gebauten Widgets und die Szene.
+> Bitte **nicht** von der GitHub-URL oder aus heruntergeladenen `.tgz`-Dateien installieren: Das
+> Repository enthält nur Quellcode (ohne die fertig gebauten Widgets und die Szene), und nur über den
+> Paketnamen bekommst du sicher das veröffentlichte npm-Paket.
 
 ---
 
