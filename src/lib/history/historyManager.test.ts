@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import type { EntityDefinition } from "../entityModel.js";
-import { localDayKey, sumCategoryTotals, sumDirectionalLossTotals, sumEnergyTotals, type EnergyTotals } from "./historyManager.js";
+import { localDayKey, matchesLocalDay, sumCategoryTotals, sumDirectionalLossTotals, sumEnergyTotals, type EnergyTotals } from "./historyManager.js";
 
 function entity(overrides: Partial<EntityDefinition>): EntityDefinition {
 	return {
@@ -31,6 +31,29 @@ describe("historyManager", () => {
 			const today = new Date(2026, 8, 11, 23, 59, 0).getTime();
 			const tomorrow = new Date(2026, 8, 12, 0, 1, 0).getTime();
 			assert.notStrictEqual(localDayKey(today), localDayKey(tomorrow));
+		});
+
+		it("uses a 1-based, zero-padded month and day (YYYY-MM-DD)", () => {
+			assert.strictEqual(localDayKey(new Date(2026, 10, 4, 12, 0, 0).getTime()), "2026-11-04");
+			assert.strictEqual(localDayKey(new Date(2026, 0, 31, 0, 0, 0).getTime()), "2026-01-31");
+		});
+	});
+
+	describe("matchesLocalDay", () => {
+		const ts = new Date(2026, 10, 4, 12, 0, 0).getTime();
+
+		it("matches the current key format", () => {
+			assert.strictEqual(matchesLocalDay("2026-11-04", ts), true);
+		});
+
+		it("matches the legacy key format of 0.1.x (0-based month, no padding)", () => {
+			assert.strictEqual(matchesLocalDay("2026-10-4", ts), true);
+		});
+
+		it("does not match another day or a non-string", () => {
+			assert.strictEqual(matchesLocalDay("2026-11-05", ts), false);
+			assert.strictEqual(matchesLocalDay(undefined, ts), false);
+			assert.strictEqual(matchesLocalDay(20261104, ts), false);
 		});
 	});
 

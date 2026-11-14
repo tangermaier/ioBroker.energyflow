@@ -8,6 +8,7 @@ import { CorrectionManager } from "../ml/correctionManager.js";
 import { fetchActualProducerSeries } from "./actualYield.js";
 import { currentHourIndex, fetchOpenMeteoForecast, localDateKey, nextDateKey, toWeatherSeries, type OpenMeteoHourly } from "./openMeteo.js";
 import { dailyTotalsKWh, estimateProducerForecast, sumForecastSeries, type ForecastPoint } from "./pvModel.js";
+import { runSafely } from "../safeAsync.js";
 
 /** How many days ahead to request from Open-Meteo, matching Helios-Forecast's horizon. */
 const FORECAST_DAYS = 7;
@@ -77,7 +78,7 @@ export class ForecastManager {
 
 		await this.refresh(forecastable);
 		this.refreshTimer = this.adapter.setInterval(() => {
-			void this.refresh(forecastable);
+			runSafely(this.adapter, "Yield forecast refresh", () => this.refresh(forecastable));
 		}, REFRESH_INTERVAL_MS);
 	}
 

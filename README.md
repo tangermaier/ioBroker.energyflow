@@ -93,6 +93,10 @@ using a fixed glossary - corrections by native speakers are very welcome (pull r
 ### **WORK IN PROGRESS**
 
 - (tangermaier) 3D scene: periodic refresh uses the browser timer explicitly (repository checker E5004).
+- (tangermaier) Fixed: the internal day key of the cost accumulator (`costs.todayDate`) used a 0-based month; it is now `YYYY-MM-DD` (existing values are taken over).
+- (tangermaier) Documentation: install by package name (`iob url iobroker.solarcockpit`), requirements updated.
+- (tangermaier) Dependabot for npm and GitHub Actions.
+- (tangermaier) Background tasks (timers, state changes) catch and log their errors instead of causing unhandled rejections; the price slot timer keeps running after a failed update.
 
 ### 0.1.1 (2026-11-13)
 

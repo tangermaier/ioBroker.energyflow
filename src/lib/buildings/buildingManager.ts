@@ -4,6 +4,7 @@ import type * as utils from "@iobroker/adapter-core";
 import { getSystemLocation } from "../location.js";
 import { toLocalBuildings } from "./buildingGeometry.js";
 import { fetchOfmBuildingRings } from "./openFreeMap.js";
+import { runSafely } from "../safeAsync.js";
 
 /** How far around the home to fetch building footprints, in meters - matches Helios' MAX_DISPLAY_RADIUS_M. */
 const RADIUS_M = 250;
@@ -34,7 +35,7 @@ export class BuildingManager {
 		await this.createObjects();
 		await this.refresh();
 		this.refreshTimer = this.adapter.setInterval(() => {
-			void this.refresh();
+			runSafely(this.adapter, "Building footprint refresh", () => this.refresh());
 		}, REFRESH_INTERVAL_MS);
 	}
 

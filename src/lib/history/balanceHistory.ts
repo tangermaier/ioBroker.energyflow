@@ -30,7 +30,22 @@ export interface EnergyTotals {
  */
 export function localDayKey(ts: number): string {
 	const d = new Date(ts);
-	return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+	return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+/**
+ * Whether a stored day key belongs to the local day of `ts`. Also accepts the key format of
+ * versions up to 0.1.1 (0-based month, no padding), so a persisted key survives the update.
+ *
+ * @param key - stored day key (any state value)
+ * @param ts - absolute Unix timestamp in milliseconds
+ */
+export function matchesLocalDay(key: unknown, ts: number): boolean {
+	if (typeof key !== "string") {
+		return false;
+	}
+	const d = new Date(ts);
+	return key === localDayKey(ts) || key === `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 }
 
 /** Hour (window-end timestamp, ms) -> mean power in W. */

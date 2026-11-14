@@ -18,6 +18,7 @@ import {
 	type EntityRowConfig,
 	type LossDefinition,
 } from "./entityModel.js";
+import { runSafely } from "./safeAsync.js";
 
 const CATEGORY_NAMES: Record<EntityCategory, Translated> = {
 	producer: tAll("Producer"),
@@ -152,7 +153,7 @@ export class EntityManager {
 
 		if (this.entities.some(e => e.powerSource === "measuredWithFallback")) {
 			this.staleTimer = this.adapter.setInterval(() => {
-				void this.onStaleCheck();
+				runSafely(this.adapter, "Stale source check", () => this.onStaleCheck());
 			}, STALE_CHECK_INTERVAL_MS);
 		}
 	}

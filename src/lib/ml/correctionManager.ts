@@ -7,6 +7,7 @@ import { getHistorySourceFromAdapter, isHistoryConfigured } from "../history/his
 import type { ForecastPoint } from "../forecast/pvModel.js";
 import { applyCorrection, deserializeModel, serializeModel, trainCorrectionModel, type SerializedModel } from "./correctionModel.js";
 import { fetchTrainingPairs, MIN_TRAINING_POINTS } from "./trainingData.js";
+import { runSafely } from "../safeAsync.js";
 
 /** How many days of InfluxDB/Open-Meteo-historical data to train on. */
 const TRAINING_WINDOW_DAYS = 60;
@@ -62,9 +63,9 @@ export class CorrectionManager {
 			return;
 		}
 
-		void this.trainAll(entities, historySource, location);
+		runSafely(this.adapter, "Yield forecast correction training", () => this.trainAll(entities, historySource, location));
 		this.retrainTimer = this.adapter.setInterval(() => {
-			void this.trainAll(entities, historySource, location);
+			runSafely(this.adapter, "Yield forecast correction training", () => this.trainAll(entities, historySource, location));
 		}, RETRAIN_INTERVAL_MS);
 	}
 

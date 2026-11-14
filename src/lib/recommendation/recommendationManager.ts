@@ -2,7 +2,7 @@ import { tAll } from "../i18n/i18n.js";
 import type * as utils from "@iobroker/adapter-core";
 import type { EntityDefinition } from "../entityModel.js";
 import type { ForecastPoint } from "../forecast/pvModel.js";
-import { localDayKey } from "../history/historyManager.js";
+import { localDayKey, matchesLocalDay } from "../history/historyManager.js";
 import { getHistorySourceFromAdapter, isHistoryConfigured, queryHourlyActual } from "../history/historyClient.js";
 import { buildLoadProfile, consumptionSeries, expectedLoadW, type LoadProfile } from "../planner/loadProfile.js";
 import { computePlan, findFlexWindow, type BatteryParams, type PlanInputSlot } from "../planner/optimizer.js";
@@ -10,6 +10,7 @@ import { buildPlanText, modeLabel, pvAt, serializePlan } from "../planner/planTe
 import type { PriceManager } from "../prices/priceManager.js";
 import { findSlotAt, median } from "../prices/tibber.js";
 import { buildRecommendationText, computeSurplusSeries, findBestSurplusWindow, positiveSurplusKWh, splitTodayTomorrow } from "./surplus.js";
+import { handleTaskError, runSafely } from "../safeAsync.js";
 
 /** Plan recomputation cadence - one Tibber slot. */
 const SLOT_MS = 15 * 60 * 1000;
@@ -70,8 +71,8 @@ export class RecommendationManager {
 		await this.refreshProfile();
 		await this.refresh();
 		this.scheduleSlotTick();
-		this.profileTimer = this.adapter.setInterval(() => void this.refreshProfile(), PROFILE_REFRESH_MS);
-		this.costTimer = this.adapter.setInterval(() => void this.sampleCost(), COST_SAMPLE_MS);
+		this.profileTimer = this.adapter.setInterval(() => runSafely(this.adapter, "Load profile refresh", () => this.refreshProfile()), PROFILE_REFRESH_MS);
+		this.costTimer = this.adapter.setInterval(() => runSafely(this.adapter, "Cost sampling", () => this.sampleCost()), COST_SAMPLE_MS);
 	}
 
 	/** Stops all timers. Call this from the adapter's unload handler. */
@@ -122,7 +123,7 @@ export class RecommendationManager {
 				await this.computeAndWrite();
 			} while (this.refreshAgain);
 		} catch (error) {
-			this.adapter.log.warn(`Energy plan computation failed: ${error instanceof Error ? error.message : String(error)}`);
+			handleTaskError(this.adapter, "Energy plan computation", error);
 		} finally {
 			this.refreshing = false;
 		}
@@ -275,9 +276,9 @@ export class RecommendationManager {
 		const storedKey = (await this.adapter.getStateAsync("costs.todayDate"))?.val;
 		const storedToday = (await this.getNumberState("costs.today")) ?? 0;
 		const storedYesterday = (await this.getNumberState("costs.yesterday")) ?? 0;
-		if (storedKey === todayKey) {
+		if (matchesLocalDay(storedKey, now)) {
 			this.cost = { dayKey: todayKey, todayCt: storedToday * 100, yesterdayCt: storedYesterday * 100, lastSampleTs: 0 };
-		} else if (storedKey === localDayKey(yesterdayDate.getTime())) {
+		} else if (matchesLocalDay(storedKey, yesterdayDate.getTime())) {
 			this.cost = { dayKey: todayKey, todayCt: 0, yesterdayCt: storedToday * 100, lastSampleTs: 0 };
 		} else {
 			this.cost = { dayKey: todayKey, todayCt: 0, yesterdayCt: 0, lastSampleTs: 0 };

@@ -10,6 +10,7 @@ import {
 	type PriceSlot,
 	type TibberHomeInfo,
 } from "./tibber.js";
+import { runSafely } from "../safeAsync.js";
 
 /**
  * Own default datapoints under 0_userdata.0, created if the corresponding admin config field is
@@ -334,13 +335,16 @@ export class PriceManager {
 		const now = Date.now();
 		const next = Math.floor(now / FIXED_SLOT_MS) * FIXED_SLOT_MS + FIXED_SLOT_MS + 2000;
 		this.slotTimer = this.adapter.setTimeout(() => {
-			void (async () => {
-				if (this.useTibber) {
-					this.cachedSlots = mergePriceSlots([this.cachedSlots], Date.now());
+			runSafely(this.adapter, "Price slot update", async () => {
+				try {
+					if (this.useTibber) {
+						this.cachedSlots = mergePriceSlots([this.cachedSlots], Date.now());
+					}
+					await this.recompute();
+				} finally {
+					this.scheduleSlotTick(); // keep ticking even if one update failed
 				}
-				await this.recompute();
-				this.scheduleSlotTick();
-			})();
+			});
 		}, next - now);
 	}
 

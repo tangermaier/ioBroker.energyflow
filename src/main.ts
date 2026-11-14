@@ -7,6 +7,7 @@ import { ForecastManager } from "./lib/forecast/forecastManager.js";
 import { HistoryManager } from "./lib/history/historyManager.js";
 import { PriceManager } from "./lib/prices/priceManager.js";
 import { RecommendationManager } from "./lib/recommendation/recommendationManager.js";
+import { runSafely } from "./lib/safeAsync.js";
 
 class SolarCockpit extends utils.Adapter {
 	private entityManager!: EntityManager;
@@ -177,11 +178,14 @@ class SolarCockpit extends utils.Adapter {
 			}
 			return;
 		}
+		if (!this.entityManager) {
+			return; // still starting up
+		}
 		if (this.priceManager?.isRelevant(id)) {
-			void this.priceManager.onForeignStateChange(id);
+			runSafely(this, "Price update", () => this.priceManager.onForeignStateChange(id));
 			return;
 		}
-		void this.entityManager.onForeignStateChange(id, state);
+		runSafely(this, "Source state update", () => this.entityManager.onForeignStateChange(id, state));
 	}
 
 	/**

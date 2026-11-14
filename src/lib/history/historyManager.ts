@@ -16,13 +16,15 @@ import {
 	effectiveHourly,
 	inverterLossHourly,
 	localDayKey,
+	matchesLocalDay,
 	measuredHourly,
 	totalsFromHourly,
 	type EnergyTotals,
 	type HourlySeries,
 } from "./balanceHistory.js";
+import { runSafely } from "../safeAsync.js";
 
-export { localDayKey, type EnergyTotals };
+export { localDayKey, matchesLocalDay, type EnergyTotals };
 
 /** How often to recompute the Today/Yesterday/Last-7-Days totals - these change slowly, no need for anything near-real-time. */
 const REFRESH_INTERVAL_MS = 15 * 60 * 1000;
@@ -184,7 +186,7 @@ export class HistoryManager {
 
 		await this.refresh(entities, childrenByParent);
 		this.refreshTimer = this.adapter.setInterval(() => {
-			void this.refresh(entities, childrenByParent);
+			runSafely(this.adapter, "Energy history refresh", () => this.refresh(entities, childrenByParent));
 		}, REFRESH_INTERVAL_MS);
 	}
 
